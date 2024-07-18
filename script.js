@@ -1,3 +1,6 @@
+const newBook_btn = document.getElementById('add-book');
+const modal = document.querySelector('dialog.book-form');
+
 const myLibrary = [];
 
 function Book(title, author, pages, isRead) {
@@ -37,6 +40,10 @@ function updateLibraryCards() {
         pages.textContent += myLibrary[i].pages + " total pages";
     }
 }
+
+newBook_btn.addEventListener('click', () => {
+    modal.showModal();
+});
 
 updateLibraryCards();
 
