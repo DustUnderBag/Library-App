@@ -23,3 +23,20 @@ let book2 = new Book("The Little Prince", "Antoine de Saint-Exupéry", 102, fals
 addBookToLibrary(book1);
 addBookToLibrary(book2);
 
+function updateLibraryCards() {
+    for(let i = 0; i < myLibrary.length; i++) {
+        let id = 'book' + (i + 1);
+        console.log(id);
+        const title = document.querySelector(`#${id} .title`);
+        const author = document.querySelector(`#${id} .author`);
+        const pages = document.querySelector(`#${id} .pages`);
+        console.log(title, author, pages);
+
+        title.textContent += myLibrary[i].title;
+        author.textContent += myLibrary[i].author;
+        pages.textContent += myLibrary[i].pages + " total pages";
+    }
+}
+
+updateLibraryCards();
+
