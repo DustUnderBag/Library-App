@@ -12,19 +12,25 @@
     <button id="add-book">NEW BOOK</button>
     <dialog class="book-modal">
         <h2>Create book</h2>
-        <form method="dialog">
+        <form method="post">
             <div class="form-row">
-                <label for="title">Title</label>
+                <label for="title">
+                    Title <span class="required">*</span>
+                </label>
                 <input type="text" id="title" name="title" required>
             </div>
 
             <div class="form-row">
-                <label for="author">Author</label>
+                <label for="author">
+                    Author <span class="required">*</span>
+                </label>
                 <input type="text" id="author" name="author" required>
             </div>
 
             <div class="form-row">
-                <label for="pages">Pages</label>
+                <label for="pages">
+                    Pages <span class="required">*</span>
+                </label>
                 <input type="number" id="pages" name="pages" min="1" required>
             </div>
 
@@ -33,7 +39,7 @@
                 <input type="checkbox" id="isRead" name="isRead">
             </div>
 
-            <button type="submit">Add book</button>
+            <button type="button" class="submit">Add book</button>
         </form>
     </dialog>
 

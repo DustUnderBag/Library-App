@@ -5,10 +5,11 @@ const modal = document.querySelector('dialog.book-modal');
 const input_title = document.querySelector("input#title");
 const input_author = document.querySelector("input#author");
 const input_pages = document.querySelector("input#pages");
-const text_inputs = [input_title, input_author, input_pages];
+//Store inputs for validation in an array
+const inputs_Validate = [input_title, input_author, input_pages];
 
 const input_isRead = document.querySelector("input#isRead");
-const btn_submit = document.querySelector("button[type='submit']");
+const btn_submit = document.querySelector("button.submit");
 
 //Cards
 const cards_container = document.querySelector('.cards-container');
@@ -49,8 +50,11 @@ function createNewBook() {
 }
 
 function clearFormInputs() {
-    for(input of text_inputs) {
+    for(input of inputs_Validate) {
         input.value = "";
+
+        input.classList.remove('invalid');
+        input.classList.remove('valid');
     }
     input_isRead.checked = false;
 }
@@ -91,13 +95,23 @@ function createCardsFromLibrary(array) {
 }
 
 btn_submit.addEventListener('click', e => {
+    if( !validateForm() ) {
+        alert("Please fill all required inputs!");
+        return;
+    }
+    if( !validatePagesNumber() ) {
+        alert("Page number must be at least 1!");
+        input_pages.focus(); //Focus on invalid page number.
+        return;
+    }
+
     clearCardContainer(); //Remove all cards
 
     createNewBook().addBookToLibrary(); //Create book obj then store in the library[]
 
     createCardsFromLibrary(myLibrary); //Create cards from scratch.
     
-    clearFormInputs(); 
+    clearFormInputs();
     modal.close();
     
     e.preventDefault(); //prevent submitting the form to server.
@@ -124,6 +138,31 @@ function clearCardContainer() {
     }
 }
 
+input_pages.addEventListener('change', validatePagesNumber);
+
+function validatePagesNumber() {
+    if(input_pages.value <= 0) {
+        input_pages.classList.add('invalid'); //To-Do: Insert alert message below this input with CSS.
+        return false;
+    } else {
+        input_pages.classList.remove('invalid');
+        return true;
+    } 
+}
+
+function validateForm() {
+    let allVaild = true;
+    for(input of inputs_Validate) {
+        if(!input.value) {
+            input.classList.add('invalid'); // //To-Do: Insert alert message below this input with CSS.
+            input.focus();
+            allVaild = false;
+        } else {
+            input.classList.remove('invalid');
+        }
+    }
+    return allVaild;
+}
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, true);
