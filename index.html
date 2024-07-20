@@ -35,8 +35,12 @@
             </div>
 
             <div class="form-row">
-                <label for="isRead">Have you finished reading it?</label>
-                <input type="checkbox" id="isRead" name="isRead">
+                <label for="progress">Progress</label>
+                <select id="progress" name="progress" required>
+                    <option value="unread">Not started</option>
+                    <option value="reading">In progress</option>
+                    <option value="read">Finished</option>
+                </select>
             </div>
 
             <button type="button" class="submit">Add book</button>

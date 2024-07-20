@@ -8,7 +8,8 @@ const input_pages = document.querySelector("input#pages");
 //Store inputs for validation in an array
 const inputs_Validate = [input_title, input_author, input_pages];
 
-const input_isRead = document.querySelector("input#isRead");
+const input_progress = document.querySelector("select#progress");
+
 const btn_submit = document.querySelector("button.submit");
 
 //Cards
@@ -17,17 +18,23 @@ const cards_container = document.querySelector('.cards-container');
 
 const myLibrary = [];
 
-function Book(title, author, pages, isRead) {
+function Book(title, author, pages, progress) {
     this.title = title;
     this.author = author;
     this.pages = pages;
-    this.isRead = isRead;
+    this.progress = progress;
 }
 
 Book.prototype.getInfo = function() {
-    let readState = this.isRead ? "is read" 
-                                : "hasn't been read yet";
-    return `${this.title} by ${this.author} has ${this.pages} pages. It ${readState}.`;
+    let progress_str;
+    if(this.progress == "unread") {
+        progress_str = "hasn't started";
+    }else if(this.progress == "reading") {
+        progress_str = "is in progress";
+    }else {
+        progress_str = "is finished";
+    }
+    return `${this.title} by ${this.author} has ${this.pages} pages. Reading ${progress_str}.`;
 }
 
 Book.prototype.addBookToLibrary = function() {
@@ -43,9 +50,9 @@ function createNewBook() {
     let title = input_title.value;
     let author = input_author.value;
     let pages = input_pages.value;
-    let isRead = (input_isRead.checked) ? true : false;
+    let progress = input_progress.value;
     
-    let temp_obj = new Book(title, author, pages, isRead);
+    let temp_obj = new Book(title, author, pages, progress);
     return temp_obj;
 }
 
@@ -56,7 +63,7 @@ function clearFormInputs() {
         input.classList.remove('invalid');
         input.classList.remove('valid');
     }
-    input_isRead.checked = false;
+    input_progress.value = "unread";
 }
 
 function createCardsFromLibrary(array) {
@@ -74,22 +81,41 @@ function createCardsFromLibrary(array) {
         const pages_DOM = document.createElement('p');
         pages_DOM.textContent = book.pages;
     
-        const read_DOM = document.createElement('input');
-        read_DOM.setAttribute('type', 'checkbox');
-        read_DOM.setAttribute('data-index', index);
-        read_DOM.checked = (book.isRead) ? true : false;
+        //To create dropdown menu for reading progress in cards
+        const progress_DOM = document.createElement("select");
+        progress_DOM.setAttribute("data-index", index);
+        progress_DOM.setAttribute("id", index);
+
+        const unread_opt = document.createElement("option");
+        unread_opt.setAttribute("value", "unread");
+        unread_opt.append("Not started");
+        progress_DOM.appendChild(unread_opt);
+
+        const reading_opt = document.createElement("option");
+        reading_opt.setAttribute("value", "reading");
+        reading_opt.append("In progress");
+        progress_DOM.appendChild(reading_opt);
+
+        const read_opt = document.createElement("option");
+        read_opt.setAttribute("value", "read");
+        read_opt.append("Finished");
+        progress_DOM.appendChild(read_opt);
+
+        progress_DOM.value = book.progress;
     
+        //Delete button
         const delete_Btn = document.createElement('button');
         delete_Btn.textContent = "X";
         delete_Btn.classList.add('delete_btn');
         delete_Btn.setAttribute('data-index', index);
         delete_Btn.addEventListener('click', deleteBook);
     
+        //append elements to card
         cards_container.appendChild(card_DOM);
         card_DOM.appendChild(title_DOM);
         card_DOM.appendChild(author_DOM);
         card_DOM.appendChild(pages_DOM);
-        card_DOM.appendChild(read_DOM);
+        card_DOM.appendChild(progress_DOM);
         card_DOM.appendChild(delete_Btn);
     } );
 }
@@ -164,11 +190,13 @@ function validateForm() {
     return allVaild;
 }
 
+
+
 // Default Books
-let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, true);
-let book2 = new Book("The Little Prince", "Antoine de Saint-Exupéry", 102, false);
-let book3 = new Book("To Kill a Mockingbird", "Harper Lee", 281, true);
-let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, false);
+let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
+let book2 = new Book("The Little Prince", "Antoine de Saint-Exupéry", 102, "reading");
+let book3 = new Book("To Kill a Mockingbird", "Harper Lee", 281, "unread");
+let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, "reading");
 book1.addBookToLibrary();
 book2.addBookToLibrary();
 book3.addBookToLibrary();
