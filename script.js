@@ -102,6 +102,7 @@ function createCardsFromLibrary(array) {
         progress_DOM.appendChild(read_opt);
 
         progress_DOM.value = book.progress;
+        progress_DOM.addEventListener('change', setProgress);
     
         //Delete button
         const delete_Btn = document.createElement('button');
@@ -190,7 +191,11 @@ function validateForm() {
     return allVaild;
 }
 
-
+function setProgress() {
+    let index = this.getAttribute('data-index');    
+    myLibrary[index].progress = this.value;
+    console.log(`${myLibrary[index].title}'s(index:${index}) progress has been set to ${this.value}.`);
+}
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
