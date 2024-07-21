@@ -15,14 +15,21 @@ const btn_submit = document.querySelector("button.submit");
 //Cards
 const cards_container = document.querySelector('.cards-container');
 
+//Filter & sort dropdown menus
+const sort_select = document.getElementById('sort');
+const filter_select = document.getElementById('filter-progress');
+const reset_settings = document.querySelector('button.reset-settings');
 
 const myLibrary = [];
+let filtered = [];
+let sorted = [];
 
 function Book(title, author, pages, progress) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.progress = progress;
+    this.timeAdded = Math.floor( Date.now() / 1000 );
 }
 
 Book.prototype.getInfo = function() {
@@ -197,13 +204,58 @@ function setProgress() {
     console.log(`${myLibrary[index].title}'s(index:${index}) progress has been set to ${this.value}.`);
 }
 
+//Filter & Sorting settings
+filter_select.addEventListener('change', e => {
+    filtered = filter_books(myLibrary, filter_select.value);
+    clearCardContainer();
+    createCardsFromLibrary(filtered);
+});
+
+sort_select.addEventListener('change', e => {
+    console.log(sort_select.value);
+    sorted = sort_books(filtered, sort_select.value);
+    clearCardContainer();
+    createCardsFromLibrary(filtered);
+});
+
+
+function filter_books(array, progress) {
+    if(progress == "all") { //return original array if all progress.
+        return myLibrary;
+    }else { 
+        return array.filter( book => (book.progress == progress)) 
+    };
+
+}
+
+function sort_books(array, property) {
+    //Sort books by comparing their title/author/timeAdded.
+    //property: refers to object property, on which the comparison performs.
+    if(property == "title" || property == "author") {
+        return array.sort( (a, b) => 
+            a[property].localeCompare( b[property]) );
+    } else {
+        return array.sort( (a, b) => b[property] - a[property] );
+    }
+
+}
+
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
 let book2 = new Book("The Little Prince", "Antoine de Saint-Exupéry", 102, "reading");
 let book3 = new Book("To Kill a Mockingbird", "Harper Lee", 281, "unread");
 let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, "reading");
+//Set made-up time stamp of books being added.
+book1.timeAdded = 1;
+book2.timeAdded = 2;
+book3.timeAdded = 3;
+book4.timeAdded = 4;
+//Added default books to myLibrary.
 book1.addBookToLibrary();
 book2.addBookToLibrary();
 book3.addBookToLibrary();
 book4.addBookToLibrary();
+
+filtered = filter_books(myLibrary, filter_select.value);
+sorted = sort_books(filtered, sort_select.value);
 createCardsFromLibrary(myLibrary);

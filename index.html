@@ -9,6 +9,23 @@
 <body>
     <h1>Library</h1>
 
+
+    
+    <div class="header">
+        <button class="reset-settings">Reset</button>
+        <select name="sort" id="sort">
+            <option value="timeAdded">Last added</option>
+            <option value="author">Author</option>
+            <option value="title">Title</option>
+        </select>
+
+        <select name="filter_progress" id="filter-progress">
+            <option value="all">All progress</option>
+            <option value="unread">Not started</option>
+            <option value="reading">In progress</option>
+            <option value="read">Finished</option>
+        </select>
+    </div>
     <button id="add-book">NEW BOOK</button>
     <dialog class="book-modal">
         <h2>Create book</h2>
