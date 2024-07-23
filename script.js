@@ -221,6 +221,12 @@ function setProgress() {
             progress has been set to ${myLibrary[position].progress}.`
         );
     }
+
+    filtered = filter_books(myLibrary, filter_dropdown.value);
+    sorted = sort_books(filtered, sort_dropdown.value);
+
+    clearCardContainer();
+    createCardsFromLibrary(sorted);
     
 }
 
@@ -279,7 +285,7 @@ function reset_settings() {
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
 let book2 = new Book("Ulysses", "James Joyce", 560, "reading");
-let book3 = new Book("Nineteen Eighty Four", " George Orwell", 449, "unread");
+let book3 = new Book("Nineteen Eighty Four", "George Orwell", 449, "unread");
 let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, "reading");
 let book5 = new Book("In Search of Lost Time", "Marcel Proust", 4215, "read");
 
