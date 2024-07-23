@@ -30,6 +30,7 @@ function Book(title, author, pages, progress) {
     this.pages = pages;
     this.progress = progress;
     this.timeAdded = Math.floor( Date.now() / 1000 );
+    this.identifier = Math.floor( Math.random() * 100000 ); // Generate random unique Idex.
 }
 
 Book.prototype.getInfo = function() {
@@ -74,13 +75,14 @@ function clearFormInputs() {
 }
 
 function createCardsFromLibrary(array) {
-    array.forEach( (book, index) => {
+    array.forEach( book => {
+        let identifier = book.identifier;
         const card_DOM = document.createElement('div');
         card_DOM.classList.add('card');
-        card_DOM.setAttribute('data-index', index);
+        card_DOM.setAttribute('data-identifier', identifier);
     
         const title_DOM = document.createElement('h2');
-        title_DOM.textContent = book.title;
+        title_DOM.textContent = book.title + `id: ${identifier}`;
     
         const author_DOM = document.createElement('p');
         author_DOM.textContent = book.author;
@@ -90,8 +92,7 @@ function createCardsFromLibrary(array) {
     
         //To create dropdown menu for reading progress in cards
         const progress_DOM = document.createElement("select");
-        progress_DOM.setAttribute("data-index", index);
-        progress_DOM.setAttribute("id", index);
+        progress_DOM.setAttribute("data-identifier", identifier);
 
         const unread_opt = document.createElement("option");
         unread_opt.setAttribute("value", "unread");
@@ -115,7 +116,7 @@ function createCardsFromLibrary(array) {
         const delete_Btn = document.createElement('button');
         delete_Btn.textContent = "X";
         delete_Btn.classList.add('delete_btn');
-        delete_Btn.setAttribute('data-index', index);
+        delete_Btn.setAttribute('data-identifier', identifier);
         delete_Btn.addEventListener('click', deleteBook);
     
         //append elements to card
@@ -139,12 +140,13 @@ btn_submit.addEventListener('click', e => {
         return;
     }
 
-    clearCardContainer(); //Remove all cards
-
     createNewBook().addBookToLibrary(); //Create book obj then store in the library[]
 
+    filtered = filter_books(myLibrary, filter_dropdown.value); 
+    sorted = sort_books(filtered, sort_dropdown.value);
 
-    createCardsFromLibrary(myLibrary); //Create cards from scratch.
+    clearCardContainer(); //Remove all cards
+    createCardsFromLibrary(sorted);
     
     clearFormInputs();
     modal.close();
@@ -155,16 +157,26 @@ btn_submit.addEventListener('click', e => {
 
 function deleteBook() {
     clearCardContainer(); //Remove all cards
+
+    let idf = this.getAttribute('data-identifier'); //Locate book identifier inside myLibrary[]  
+    console.log('data-identifier: ' + idf);
+
+    let position = getPosFromIdentifier(idf);
+    console.log(`position: ${position}, title: ${myLibrary[position].title}.` );
+
+    if(position >= 0) { //Execute only if valid position is returned.
+        myLibrary.splice(position, 1);
+
+        filtered = filter_books(myLibrary, filter_dropdown.value); 
+        sorted = sort_books(filtered, sort_dropdown.value);
     
-    let index = this.getAttribute('data-index'); //Locate book index inside myLibrary[]
-    deleteBookFromLibrary(index);
-    
-    createCardsFromLibrary(myLibrary); ////Create cards from scratch.
+        createCardsFromLibrary(sorted);
+    }
+
 }
 
-function deleteBookFromLibrary(index) {
-    console.log(`Deleted \"${myLibrary[index].title}\", its index: ${index}`);
-    myLibrary.splice(index, 1);
+function getPosFromIdentifier(identifier) {
+    return myLibrary.findIndex( book => book.identifier == identifier);
 }
 
 function clearCardContainer() {
@@ -200,9 +212,16 @@ function validateForm() {
 }
 
 function setProgress() {
-    let index = this.getAttribute('data-index');    
-    myLibrary[index].progress = this.value;
-    console.log(`${myLibrary[index].title}'s(index:${index}) progress has been set to ${this.value}.`);
+    let identifier = this.getAttribute('data-identifier');
+    let position = getPosFromIdentifier(identifier);
+
+    if(position >= 0) { //Execute only if valid position is returned.
+        myLibrary[position].progress = this.value;
+        console.log(`${myLibrary[position].title}'s(identifier:${identifier}) 
+            progress has been set to ${myLibrary[position].progress}.`
+        );
+    }
+    
 }
 
 //Filter & Sorting settings
@@ -213,14 +232,17 @@ filter_dropdown.addEventListener('change', e => {
 });
 
 sort_dropdown.addEventListener('change', e => {
-    console.log(sort_dropdown.value);
     sorted = sort_books(filtered, sort_dropdown.value);
     clearCardContainer();
     createCardsFromLibrary(sorted);
 });
 
 reset_btn.addEventListener('click', e => {
-    reset_settings(); //reset dropdowns' values, then run filter and sort.
+    reset_settings(); //reset dropdowns' values...
+
+    //...then run filter and sort.
+    filtered = filter_books(myLibrary, filter_dropdown.value); 
+    sorted = sort_books(filtered, sort_dropdown.value);
 
     clearCardContainer();
     createCardsFromLibrary(sorted);
@@ -241,7 +263,6 @@ function sort_books(array, property) {
        - property: refers to object property on which the comparison performs.
      */
     let array_clone = [...array]; //Clone input array to make the sort() non-mutating.
-    console.log(array_clone);
     if(property == "title" || property == "author") {
         return array_clone.sort( (a, b) => 
             a[property].localeCompare( b[property]) );
@@ -253,27 +274,28 @@ function sort_books(array, property) {
 function reset_settings() {
     filter_dropdown.value = "all";
     sort_dropdown.value = "timeAdded";
-
-    filtered = filter_books(myLibrary, filter_dropdown.value);
-    sorted = sort_books(filtered, sort_dropdown.value);
 }
-
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
-let book2 = new Book("The Little Prince", "Antoine de Saint-Exupéry", 102, "reading");
-let book3 = new Book("To Kill a Mockingbird", "Harper Lee", 281, "unread");
+let book2 = new Book("Ulysses", "James Joyce", 560, "reading");
+let book3 = new Book("Nineteen Eighty Four", " George Orwell", 449, "unread");
 let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, "reading");
+let book5 = new Book("In Search of Lost Time", "Marcel Proust", 4215, "read");
+
 //Set made-up time stamp of books being added.
-book1.timeAdded = 4;
-book2.timeAdded = 3;
-book3.timeAdded = 2;
-book4.timeAdded = 1
+book1.timeAdded = 5;
+book2.timeAdded = 4;
+book3.timeAdded = 3;
+book4.timeAdded = 2;
+book5.timeAdded = 1;
+
 //Added default books to myLibrary.
 book1.addBookToLibrary();
 book2.addBookToLibrary();
 book3.addBookToLibrary();
 book4.addBookToLibrary();
+book5.addBookToLibrary();
 
 filtered = filter_books(myLibrary, filter_dropdown.value);
 sorted = sort_books(filtered, sort_dropdown.value);
