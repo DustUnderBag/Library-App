@@ -18,7 +18,7 @@ const cards_container = document.querySelector('.cards-container');
 //Filter & sort dropdown menus
 const sort_dropdown = document.getElementById('sort');
 const filter_dropdown = document.getElementById('filter-progress');
-const reset_settings = document.querySelector('button.reset-settings');
+const reset_btn = document.querySelector('button.reset-settings');
 
 const myLibrary = [];
 let filtered = [];
@@ -219,6 +219,12 @@ sort_dropdown.addEventListener('change', e => {
     createCardsFromLibrary(sorted);
 });
 
+reset_btn.addEventListener('click', e => {
+    reset_settings(); //reset dropdowns' values, then run filter and sort.
+
+    clearCardContainer();
+    createCardsFromLibrary(sorted);
+});
 
 function filter_books(array, progress) { //Non-mutating
     if(progress == "all") { //return original array if all progress.
@@ -234,7 +240,6 @@ function sort_books(array, property) {
        - Sort array(books) by comparing every title/author/timeAdded.
        - property: refers to object property on which the comparison performs.
      */
-
     let array_clone = [...array]; //Clone input array to make the sort() non-mutating.
     console.log(array_clone);
     if(property == "title" || property == "author") {
@@ -243,8 +248,16 @@ function sort_books(array, property) {
     } else {
         return array_clone.sort( (a, b) => b[property] - a[property] );
     }
-
 }
+
+function reset_settings() {
+    filter_dropdown.value = "all";
+    sort_dropdown.value = "timeAdded";
+
+    filtered = filter_books(myLibrary, filter_dropdown.value);
+    sorted = sort_books(filtered, sort_dropdown.value);
+}
+
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
