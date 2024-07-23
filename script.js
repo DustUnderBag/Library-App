@@ -16,8 +16,8 @@ const btn_submit = document.querySelector("button.submit");
 const cards_container = document.querySelector('.cards-container');
 
 //Filter & sort dropdown menus
-const sort_select = document.getElementById('sort');
-const filter_select = document.getElementById('filter-progress');
+const sort_dropdown = document.getElementById('sort');
+const filter_dropdown = document.getElementById('filter-progress');
 const reset_settings = document.querySelector('button.reset-settings');
 
 const myLibrary = [];
@@ -143,6 +143,7 @@ btn_submit.addEventListener('click', e => {
 
     createNewBook().addBookToLibrary(); //Create book obj then store in the library[]
 
+
     createCardsFromLibrary(myLibrary); //Create cards from scratch.
     
     clearFormInputs();
@@ -205,21 +206,21 @@ function setProgress() {
 }
 
 //Filter & Sorting settings
-filter_select.addEventListener('change', e => {
-    filtered = filter_books(myLibrary, filter_select.value);
+filter_dropdown.addEventListener('change', e => {
+    filtered = filter_books(myLibrary, filter_dropdown.value);
     clearCardContainer();
     createCardsFromLibrary(filtered);
 });
 
-sort_select.addEventListener('change', e => {
-    console.log(sort_select.value);
-    sorted = sort_books(filtered, sort_select.value);
+sort_dropdown.addEventListener('change', e => {
+    console.log(sort_dropdown.value);
+    sorted = sort_books(filtered, sort_dropdown.value);
     clearCardContainer();
-    createCardsFromLibrary(filtered);
+    createCardsFromLibrary(sorted);
 });
 
 
-function filter_books(array, progress) {
+function filter_books(array, progress) { //Non-mutating
     if(progress == "all") { //return original array if all progress.
         return myLibrary;
     }else { 
@@ -229,13 +230,18 @@ function filter_books(array, progress) {
 }
 
 function sort_books(array, property) {
-    //Sort books by comparing their title/author/timeAdded.
-    //property: refers to object property, on which the comparison performs.
+    /* Parameters
+       - Sort array(books) by comparing every title/author/timeAdded.
+       - property: refers to object property on which the comparison performs.
+     */
+
+    let array_clone = [...array]; //Clone input array to make the sort() non-mutating.
+    console.log(array_clone);
     if(property == "title" || property == "author") {
-        return array.sort( (a, b) => 
+        return array_clone.sort( (a, b) => 
             a[property].localeCompare( b[property]) );
     } else {
-        return array.sort( (a, b) => b[property] - a[property] );
+        return array_clone.sort( (a, b) => b[property] - a[property] );
     }
 
 }
@@ -246,16 +252,16 @@ let book2 = new Book("The Little Prince", "Antoine de Saint-Exupéry", 102, "rea
 let book3 = new Book("To Kill a Mockingbird", "Harper Lee", 281, "unread");
 let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, "reading");
 //Set made-up time stamp of books being added.
-book1.timeAdded = 1;
-book2.timeAdded = 2;
-book3.timeAdded = 3;
-book4.timeAdded = 4;
+book1.timeAdded = 4;
+book2.timeAdded = 3;
+book3.timeAdded = 2;
+book4.timeAdded = 1
 //Added default books to myLibrary.
 book1.addBookToLibrary();
 book2.addBookToLibrary();
 book3.addBookToLibrary();
 book4.addBookToLibrary();
 
-filtered = filter_books(myLibrary, filter_select.value);
-sorted = sort_books(filtered, sort_select.value);
-createCardsFromLibrary(myLibrary);
+filtered = filter_books(myLibrary, filter_dropdown.value);
+sorted = sort_books(filtered, sort_dropdown.value);
+createCardsFromLibrary(sorted);
