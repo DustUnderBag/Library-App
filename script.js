@@ -142,11 +142,8 @@ btn_submit.addEventListener('click', e => {
 
     createNewBook().addBookToLibrary(); //Create book obj then store in the library[]
 
-    filtered = filter_books(myLibrary, filter_dropdown.value); 
-    sorted = sort_books(filtered, sort_dropdown.value);
-
-    clearCardContainer(); //Remove all cards
-    createCardsFromLibrary(sorted);
+    updateArraysFromSettings();
+    refreshCards();
     
     clearFormInputs();
     modal.close();
@@ -156,8 +153,6 @@ btn_submit.addEventListener('click', e => {
 
 
 function deleteBook() {
-    clearCardContainer(); //Remove all cards
-
     let idf = this.getAttribute('data-identifier'); //Locate book identifier inside myLibrary[]  
     console.log('data-identifier: ' + idf);
 
@@ -167,10 +162,8 @@ function deleteBook() {
     if(position >= 0) { //Execute only if valid position is returned.
         myLibrary.splice(position, 1);
 
-        filtered = filter_books(myLibrary, filter_dropdown.value); 
-        sorted = sort_books(filtered, sort_dropdown.value);
-    
-        createCardsFromLibrary(sorted);
+        updateArraysFromSettings();
+        refreshCards();
     }
 
 }
@@ -222,37 +215,41 @@ function setProgress() {
         );
     }
 
-    filtered = filter_books(myLibrary, filter_dropdown.value);
-    sorted = sort_books(filtered, sort_dropdown.value);
-
-    clearCardContainer();
-    createCardsFromLibrary(sorted);
-    
+    updateArraysFromSettings();
+    refreshCards();
 }
 
 //Filter & Sorting settings
 filter_dropdown.addEventListener('change', e => {
-    filtered = filter_books(myLibrary, filter_dropdown.value);
-    clearCardContainer();
-    createCardsFromLibrary(filtered);
+    updateArraysFromSettings();
+    refreshCards();
 });
 
 sort_dropdown.addEventListener('change', e => {
-    sorted = sort_books(filtered, sort_dropdown.value);
-    clearCardContainer();
-    createCardsFromLibrary(sorted);
+    updateArraysFromSettings();
+    refreshCards();
 });
 
 reset_btn.addEventListener('click', e => {
-    reset_settings(); //reset dropdowns' values...
+    resetSettings(); //Only reset dropdowns' values
+    updateArraysFromSettings();
+    refreshCards();
+});
 
-    //...then run filter and sort.
-    filtered = filter_books(myLibrary, filter_dropdown.value); 
+function updateArraysFromSettings() {
+    filtered = filter_books(myLibrary, filter_dropdown.value);
     sorted = sort_books(filtered, sort_dropdown.value);
+}
 
+function resetSettings() {
+    filter_dropdown.value = "all";
+    sort_dropdown.value = "timeAdded";
+}
+
+function refreshCards() {
     clearCardContainer();
     createCardsFromLibrary(sorted);
-});
+}
 
 function filter_books(array, progress) { //Non-mutating
     if(progress == "all") { //return original array if all progress.
@@ -260,7 +257,6 @@ function filter_books(array, progress) { //Non-mutating
     }else { 
         return array.filter( book => (book.progress == progress)) 
     };
-
 }
 
 function sort_books(array, property) {
@@ -277,10 +273,6 @@ function sort_books(array, property) {
     }
 }
 
-function reset_settings() {
-    filter_dropdown.value = "all";
-    sort_dropdown.value = "timeAdded";
-}
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
