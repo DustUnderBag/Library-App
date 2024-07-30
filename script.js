@@ -1,17 +1,26 @@
-//Modal input elements
+//Add Book modal & inputs
 const btn_newBook = document.querySelector("button#add-book");
-const modal = document.querySelector('dialog.book-modal');
 
+const modal = document.querySelector('dialog.book-modal');
 const input_title = document.querySelector("input#title");
 const input_author = document.querySelector("input#author");
 const input_pages = document.querySelector("input#pages");
-//Store inputs for validation in an array
-const inputs_Validate = [input_title, input_author, input_pages];
-
 const input_progress = document.querySelector("select#progress");
+
+const inputs_Validate = [input_title, input_author, input_pages]; //Store inputs for validation in an array
 
 const btn_submit = document.querySelector("button.submit");
 const btn_cancel = document.querySelector("button.cancel");
+
+//Edit Book modal & inputs
+const edit_modal = document.querySelector('dialog.edit-modal');
+const edit_title = document.querySelector('#edit-title');
+const edit_author = document.querySelector('#edit-author');
+const edit_pages = document.querySelector('#edit-pages');
+const edit_progress = document.querySelector('#edit-progress');
+
+const btn_edit_submit = document.querySelector("button#edit-submit");
+const btn_edit_Cancel = document.querySelector("button#edit-cancel");
 
 //Cards
 const cards_container = document.querySelector('.cards-container');
@@ -102,7 +111,6 @@ function createCardsFromLibrary(array) {
         progress_DOM.setAttribute("data-identifier", identifier);
         progress_DOM.classList.add('card-progress')
 
-
         //Create option elements for all progress states.
         const unread_opt = document.createElement("option");
         unread_opt.setAttribute("value", "unread");
@@ -123,10 +131,16 @@ function createCardsFromLibrary(array) {
         progress_DOM.addEventListener('change', setProgress);
     
         //Delete button
-        const delete_Btn = document.createElement('button');
-        delete_Btn.classList.add('delete-btn');
-        delete_Btn.setAttribute('data-identifier', identifier);
-        delete_Btn.addEventListener('click', deleteBook);
+        const delete_btn = document.createElement('button');
+        delete_btn.classList.add('delete-btn');
+        delete_btn.setAttribute('data-identifier', identifier);
+        delete_btn.addEventListener('click', deleteBook);
+        
+        //Edit button
+        const edit_btn = document.createElement('button');
+        edit_btn.classList.add('edit-btn')
+        edit_btn.setAttribute('data-identifier', identifier);
+        edit_btn.addEventListener('click', showEditModal);
     
         //append elements to card
         cards_container.appendChild(card_DOM); //card as container's child.
@@ -138,7 +152,8 @@ function createCardsFromLibrary(array) {
         bookInfo_DOM.appendChild(pages_DOM);
 
         card_DOM.appendChild(progress_DOM);
-        card_DOM.appendChild(delete_Btn);
+        card_DOM.appendChild(delete_btn);
+        card_DOM.appendChild(edit_btn);
     } );
 }
 
@@ -165,28 +180,65 @@ btn_submit.addEventListener('click', e => {
 })
 
 btn_cancel.addEventListener('click', () => {
-    clearFormInputs();
     modal.close();
-    
-    e.preventDefault(); //prevent submitting the form to server.
 });
-
 
 function deleteBook() {
     let idf = this.getAttribute('data-identifier'); //Locate book identifier inside myLibrary[]  
     console.log('data-identifier: ' + idf);
 
-    let position = getPosFromIdentifier(idf);
-    console.log(`position: ${position}, title: ${myLibrary[position].title}.` );
+    let pos = getPosFromIdentifier(idf);
+    console.log(`position: ${pos}, title: ${myLibrary[pos].title}.` );
 
-    if(position >= 0) { //Execute only if valid position is returned.
-        myLibrary.splice(position, 1);
+    if(pos >= 0) { //Execute only if valid position is returned.
+        myLibrary.splice(pos, 1);
 
         updateArraysFromSettings();
         refreshCards();
     }
-
 }
+
+btn_edit_submit.addEventListener('click', submitEdit);
+btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
+
+function showEditModal() {
+    let idf = this.getAttribute('data-identifier');
+    let pos = getPosFromIdentifier(idf);
+    console.log(`Editing ${myLibrary[pos].title}.`);
+    btn_edit_submit.setAttribute('data-identifier', idf); //Indicate identifier for submit button.
+
+    let title = myLibrary[pos].title;
+    let author = myLibrary[pos].author;
+    let pages = myLibrary[pos].pages;
+    let progress = myLibrary[pos].progress;
+
+    edit_title.value = title;
+    edit_author.value = author;
+    edit_pages.value = pages;
+    edit_progress.value = progress;
+    edit_modal.show();    
+}
+
+function submitEdit() {
+    let idf = this.getAttribute('data-identifier');
+    let pos = getPosFromIdentifier(idf);
+
+    myLibrary[pos].title = edit_title.value;
+    myLibrary[pos].author = edit_author.value;
+    myLibrary[pos].pages = edit_pages.value;
+    myLibrary[pos].progress = edit_progress.value;
+
+    updateArraysFromSettings();
+    refreshCards();
+
+    edit_title.value = null;
+    edit_author.value = null;
+    edit_pages.value = null;
+    edit_progress.value = 'unread';
+
+    edit_modal.close();
+}
+
 
 function getPosFromIdentifier(identifier) {
     return myLibrary.findIndex( book => book.identifier == identifier);

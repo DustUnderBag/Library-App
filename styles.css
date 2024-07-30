@@ -130,22 +130,51 @@ h1 {
     }
 }
 
-.card .delete-btn {
+.card button {
     position: absolute;
-    top: 5px;
-    left: 5px;
+    
     width: 25px;
     height: 25px;
     border: none;
     border-radius: 5px;
-    background-color: #a84a4a;
-    background-image: url(./img/delete-icon.svg);
+
+    background-color: #ffffff75;
     background-position: 50%;
     background-size: contain;
     background-repeat: no-repeat;
+
+    opacity: 0;
+    transition: transform 0.05s linear;
+    display: none;
+
+    &:hover {
+        transform: scale(1.2);
+    }
 }
 
-dialog.book-modal {
+.card:hover button {
+    opacity: 1;
+    display: block;
+}
+
+.card .delete-btn {
+    top: 5px;
+    left: 5px;
+
+    background-image: url(./img/delete-icon.svg);  
+    background-color: #af52527c;
+}
+
+.card .edit-btn {
+    top: 5px;
+    right: 5px;
+
+    background-image: url(./img/edit-icon.svg);
+}
+
+
+dialog.book-modal,
+dialog.edit-modal {
     /*Center modal in screen*/
     position: absolute;
     top: 50%;
@@ -164,7 +193,8 @@ dialog.book-modal {
     }
 }
 
-.book-modal .form-row {
+.book-modal .form-row,
+.edit-modal .form-row {
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 60px 200px;
@@ -180,9 +210,9 @@ dialog.book-modal {
     text-align: right;
 }
 
-.book-modal input,
-.book-modal select,
-.book-modal button {
+dialog input,
+dialog select,
+dialog button {
     height: 2.2rem;
     padding: 5px 10px;
     font-size: 1.1rem;
@@ -191,7 +221,8 @@ dialog.book-modal {
     border: 1px solid #d1d1d1;
 }
 
-.book-modal button {
+.book-modal button,
+.edit-modal button {
     height: 2.6rem;
 
     display: flex;
@@ -209,7 +240,8 @@ dialog.book-modal {
     }
 }
 
-.book-modal button.cancel {
+.book-modal button.cancel,
+.edit-modal button.edit-cancel {
     background-color: #a84a4a;
 
     &:hover {
@@ -218,5 +250,6 @@ dialog.book-modal {
         transform: scale(1.05);
     }
 }
+
 
 
