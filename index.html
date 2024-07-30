@@ -12,12 +12,16 @@
 
     
     <div class="header">
-        <button class="reset-settings">Reset</button>
-        <select name="sort" id="sort">
-            <option value="timeAdded">Last added</option>
-            <option value="author">Author</option>
-            <option value="title">Title</option>
-        </select>
+        <button class="reset-settings"></button>
+
+        <label for="sort">
+            <span></span>
+            <select name="sort" id="sort">
+                <option value="timeAdded">Last added</option>
+                <option value="author">Author</option>
+                <option value="title">Title</option>
+            </select>
+        </label>
 
         <select name="filter_progress" id="filter-progress">
             <option value="all">All progress</option>
@@ -26,6 +30,7 @@
             <option value="read">Finished</option>
         </select>
     </div>
+
     <button id="add-book">NEW BOOK</button>
     <dialog class="book-modal">
         <h1>Add book</h1>
