@@ -44,15 +44,28 @@ h1 {
     border: 2px red solid;
 }
 
+/*Card Container*/
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    justify-content: space-between;
+    gap: 20px;
+
+
+    width: 80%;
+    min-width: 500px;
+}
+
+/*Card book cover*/
 .card {
-    margin: 10px;
-    width: 250px;
+    position: relative;
+
+    max-width: 270px;
     height: 350px;
 
     border-radius: var(--outer-border-radius);
     border:solid var(--border-width) transparent;
     background-color: var(--border-color);
-
 
     color: #fff;
 
@@ -115,10 +128,6 @@ h1 {
     &:focus {
         background-color: #f1f1f1;
     }
-}
-
-.card {
-    position: relative;
 }
 
 .card .delete-btn {
@@ -209,6 +218,5 @@ dialog.book-modal {
         transform: scale(1.05);
     }
 }
-
 
 
