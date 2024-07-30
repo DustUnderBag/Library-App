@@ -28,7 +28,7 @@
     </div>
     <button id="add-book">NEW BOOK</button>
     <dialog class="book-modal">
-        <h2>Create book</h2>
+        <h1>Add book</h1>
         <form method="post">
             <div class="form-row">
                 <label for="title">
@@ -60,7 +60,15 @@
                 </select>
             </div>
 
-            <button type="button" class="submit">Add book</button>
+            <div class="form-row">
+                <label for="submit"></label>
+                <button type="button" id="submit" class="submit">Add book</button>
+            </div>
+
+            <div class="form-row">
+                <label for="cancel"></label>
+                <button type="button" id="cancel" class="cancel">Cancel</button>
+            </div>
         </form>
     </dialog>
 

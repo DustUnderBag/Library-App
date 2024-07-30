@@ -135,3 +135,80 @@ h1 {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+dialog.book-modal {
+    /*Center modal in screen*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    height: 500px;
+    width: 400px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 3px  #00000098;
+    padding: 30px;
+
+    & > h1 {
+        color: #000000;
+    }
+}
+
+.book-modal .form-row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 60px 200px;
+    justify-content: center;
+    align-items: center;
+
+    grid-gap: 10px;
+
+    margin-top: 1.6rem;
+}
+
+.form-row label {
+    text-align: right;
+}
+
+.book-modal input,
+.book-modal select,
+.book-modal button {
+    height: 2.2rem;
+    padding: 5px 10px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+
+    border: 1px solid #d1d1d1;
+}
+
+.book-modal button {
+    height: 2.6rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+
+    background-color: #4c3bad;
+    border: 3px solid transparent;
+
+    &:hover {
+        border-color: #7f70dd;
+        background-color: #4c3bad;
+        transform: scale(1.05);
+    }
+}
+
+.book-modal button.cancel {
+    background-color: #a84a4a;
+
+    &:hover {
+        border-color: #e27777;
+        background-color: #5c3232;
+        transform: scale(1.05);
+    }
+}
+
+
+

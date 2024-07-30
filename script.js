@@ -11,6 +11,7 @@ const inputs_Validate = [input_title, input_author, input_pages];
 const input_progress = document.querySelector("select#progress");
 
 const btn_submit = document.querySelector("button.submit");
+const btn_cancel = document.querySelector("button.cancel");
 
 //Cards
 const cards_container = document.querySelector('.cards-container');
@@ -162,6 +163,13 @@ btn_submit.addEventListener('click', e => {
     
     e.preventDefault(); //prevent submitting the form to server.
 })
+
+btn_cancel.addEventListener('click', () => {
+    clearFormInputs();
+    modal.close();
+    
+    e.preventDefault(); //prevent submitting the form to server.
+});
 
 
 function deleteBook() {
