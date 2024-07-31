@@ -37,8 +37,12 @@ p, h1, h2, h3, h4, h5, h6 {
     --book-outer-border-radius: 5px;
     --book-border-width: 10px;
 
-    --book-border-color: #727e7a;
-    --book-inner-color: #8fa098;
+    --book-cover-darker-color: #727e7a;
+    --book-cover-color: #8fa098;
+
+    --input-border-color: #383838;
+    --select-bg-changed-color: #a5b8af;
+    --select-text-color: #161f1b;
 }
 
 body {
@@ -65,17 +69,16 @@ body {
     height: 2rem;
     font-size: 1rem;
     letter-spacing: 0.5px;
-    border-color: #6b6b6b; 
+    border: 1px solid var(--input-border-color); 
     border-radius: 16px;
     text-align: center;
-    color: #383838;;
+    color: var(--input-border-color);
     background-color: #ffffff;
 
     &:hover,
     &:focus {
         color: #000000;
         background-color: #d4d4d477;
-        border-color: #2b2b2b;
     }
 
     &:active {
@@ -91,9 +94,9 @@ body {
 }
 
 .header label.changed select { 
-    background-color: #a5b8af;
-    border-color: #a5b8af;
-    color: #304139;
+    background-color: var(--select-bg-changed-color);
+    border-color: var(--select-bg-changed-color);
+    color: var(--select-text-color);
     font-weight: 500;
 }
 
@@ -128,11 +131,10 @@ select#sort {
     background-size: contain;
     background-repeat: no-repeat;
     outline: none;
-    border: 1px solid #6b6b6b;
+    border: 1px solid var(--input-border-color);
     font-size: 1rem;
     border-radius: 50%;
     text-align: center;
-    color: #383838;;
     background-color: #ffffff;
 }
 
@@ -156,7 +158,7 @@ select#sort {
 
     border-radius: var(--book-outer-border-radius);
     border:solid var(--book-border-width) transparent;
-    background-color: var(--book-border-color);
+    background-color: var(--book-cover-darker-color);
 
     color: #fff;
 
@@ -167,9 +169,8 @@ select#sort {
 }
 
 .card > .book-info {
-    height: 90%;
-    background-color: var(--book-inner-color);
-
+    height: 85%;
+    background-color: var(--book-cover-color);
     border: 4px solid #727e7a86;
     border-radius: calc(var(--book-border-width) - var(--book-outer-border-radius));
     padding: 8px;
@@ -201,32 +202,41 @@ select#sort {
 }
 
 .card select {
-    position: relative;
-
     appearance: none;
     -webkit-appearance: none;
-    border: none;
-    outline: none;
-    
+
     width: 110px;
+    height: 1.8rem;
 
-    font-size: .9rem;
-    border-radius: 2px;
-    padding: 3px 5px;
-    background: #ffffff;
+    display: block;
+    margin-inline: auto;
+    margin-top: 15px;
 
-    &::after {
-        position: absolute;
-        top: 0;
-        right: 0;
-        content: '*';
-        width: 30px;
-        height: 100%;
-        text-align: center;
+    border: 1px solid #fff;
+    border-radius: 16px;
+    outline: none;
+    padding: 3px;
+
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    background-color: #ffffff1f;
+
+    &:hover {
+        background-color: #00000050;
     }
 
-    &:focus {
-        background-color: #f1f1f1;
+    &:active {
+        border-bottom-color: transparent;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+    }
+
+    & > option {
+        background-color: #fff;
+        color: #000;
     }
 }
 
@@ -314,13 +324,13 @@ dialog input,
 dialog select,
 dialog button {
     font-family: Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
-    
+
     height: 2.2rem;
     padding: 5px 10px;
     font-size: 1.1rem;
     border-radius: 5px;
 
-    border: 1px solid #d1d1d1;
+    border: 1px solid var(--input-border-color);
 }
 
 .book-modal button,
