@@ -1,3 +1,10 @@
+.playfair-display-normal {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 /*Style Reset*/
 *, *::before, *::after {
     box-sizing: border-box;
@@ -34,10 +41,9 @@ p, h1, h2, h3, h4, h5, h6 {
     --book-inner-color: #8fa098;
 }
 
-
-
-h1 {
-    color: red;
+body {
+    font-family: 'Playfair Display', 'Times New Roman', Times, serif;
+    letter-spacing: 1px;
 }
 
 .invalid {
@@ -104,7 +110,6 @@ select#sort {
 
 /*Reset button of sort & filter*/
 .header > .reset-settings {
-
     width: 2rem;
     height: 2rem;
     background-image: url(./img/reset-icon.svg);
@@ -125,7 +130,6 @@ select#sort {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     justify-content: space-between;
     gap: 20px;
-
 
     width: 80%;
     min-width: 500px;
@@ -162,6 +166,7 @@ select#sort {
 
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
     
     background-image: url(./img/book_texture.jpg);
     background-size: cover;
@@ -170,9 +175,17 @@ select#sort {
 
 .book-info .card-title {
     margin-top: 60px;
+    font-weight: 600;
+    letter-spacing: 2px;
 }
+
+.book-info p {
+    font-weight: 400;
+}
+
 .book-info p.card-pages {
     margin-top: auto;
+    font-family: Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
 }
 
 .card select {
