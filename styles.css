@@ -313,6 +313,8 @@ dialog.edit-modal {
 dialog input,
 dialog select,
 dialog button {
+    font-family: Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    
     height: 2.2rem;
     padding: 5px 10px;
     font-size: 1.1rem;
