@@ -61,9 +61,10 @@ body {
     appearance: none;
     -webkit-appearance: none;
     outline: none;
-    width: 130px;
+    width: 150px;
     height: 2rem;
     font-size: 1rem;
+    letter-spacing: 0.5px;
     border-color: #6b6b6b; 
     border-radius: 16px;
     text-align: center;
@@ -89,19 +90,30 @@ body {
     }
 }
 
-label[for="sort"] > span{
+.header label.changed select { 
+    background-color: #a5b8af;
+    border-color: #a5b8af;
+    color: #304139;
+    font-weight: 500;
+}
+
+.header label[for="sort"] {
     position: relative;
 }
 
-label[for="sort"] > span::before {
+label[for="sort"]::before {
     position: absolute;
-    top: 0;
+    top: 7px;
     left: 16px;
     background-image: url(./img/sort-icon.svg);
     background-size: cover;
     content: "";
     width: 1.1rem;
     height: 1.1rem;
+}
+
+label[for="sort"].changed::before {
+    background-image: url(./img/sort-changed-icon.svg);
 }
 
 select#sort {
@@ -285,7 +297,7 @@ dialog.edit-modal {
 .edit-modal .form-row {
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 60px 200px;
+    grid-template-columns: 90px 200px;
     justify-content: center;
     align-items: center;
 

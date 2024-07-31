@@ -26,7 +26,10 @@ const btn_edit_Cancel = document.querySelector("button#edit-cancel");
 const cards_container = document.querySelector('.cards-container');
 
 //Filter & sort dropdown menus
+const sort_label = document.querySelector('label[for="sort"]');
 const sort_dropdown = document.getElementById('sort');
+
+const filter_label = document.querySelector('label[for="filter-progress"]');
 const filter_dropdown = document.getElementById('filter-progress');
 const reset_btn = document.querySelector('button.reset-settings');
 
@@ -293,17 +296,29 @@ function setProgress() {
 
 //Filter & Sorting settings
 filter_dropdown.addEventListener('change', e => {
+    //Add .changed class to indicate changed filter setting
+    (filter_dropdown.value != "all")
+    ? filter_label.classList.add('changed')
+    : filter_label.classList.remove('changed');
+
     updateArraysFromSettings();
     refreshCards();
 });
 
 sort_dropdown.addEventListener('change', e => {
+    //Add .changed class to indicate changed sort setting
+    (sort_dropdown.value != "timeAdded")
+    ? sort_label.classList.add('changed')
+    : sort_label.classList.remove('changed');
+
     updateArraysFromSettings();
     refreshCards();
 });
 
 reset_btn.addEventListener('click', e => {
     resetSettings(); //Only reset dropdowns' values
+    filter_label.classList.remove('changed')
+    sort_label.classList.remove('changed')
     updateArraysFromSettings();
     refreshCards();
 });
