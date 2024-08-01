@@ -62,6 +62,7 @@ body {
 .header {
     display: flex;
     gap: 15px;
+    align-items: center;
 }
 
 /*Sort & Filter buttons*/
@@ -70,7 +71,7 @@ body {
     -webkit-appearance: none;
     outline: none;
     width: 150px;
-    height: 2rem;
+    height: 32px;
     font-size: 1rem;
     letter-spacing: 0.5px;
     border: 1px solid var(--input-border-color); 
@@ -129,8 +130,9 @@ select#sort {
 
 /*Reset button of sort & filter*/
 .header > .reset-settings {
-    width: 2rem;
-    height: 2rem;
+    flex-shrink: 0;
+    width: 28px;;
+    height: 28px;
     background-image: url(./img/reset-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
