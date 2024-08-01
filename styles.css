@@ -216,7 +216,6 @@ select#sort {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
     gap: 20px;
-    width: 80%;
     min-width: 500px;
 }
 
