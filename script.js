@@ -301,6 +301,12 @@ filter_dropdown.addEventListener('change', e => {
     ? filter_label.classList.add('changed')
     : filter_label.classList.remove('changed');
 
+    if( allSettingsChanged() ) { //Check if either setting is changed.
+        revealResetBtn();  //reveal reset_btn if either one is not default setting.
+    } else {
+        hideResetBtn();  //hide if both are default setting.
+    }
+
     updateArraysFromSettings();
     refreshCards();
 });
@@ -311,14 +317,43 @@ sort_dropdown.addEventListener('change', e => {
     ? sort_label.classList.add('changed')
     : sort_label.classList.remove('changed');
 
+    if( allSettingsChanged() ) { //Check if either setting is changed.
+        revealResetBtn();  //reveal reset_btn if either one is not default setting.
+    } else {
+        hideResetBtn(); //hide if both are default setting.
+    }
+
     updateArraysFromSettings();
     refreshCards();
 });
+
+/*Check if either setting is changed.
+  - Return true if either one is changed
+  - Return false if both are unchanged.
+*/
+function allSettingsChanged() {
+    if( sort_dropdown.value != "timeAdded" || filter_dropdown.value != "all" ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function revealResetBtn() {
+    reset_btn.style.transform = "scale(1)";
+    reset_btn.style.position = "static";
+}
+
+function hideResetBtn() {
+    reset_btn.style.transform = "scale(0)";
+    reset_btn.style.position = "absolute";
+}
 
 reset_btn.addEventListener('click', e => {
     resetSettings(); //Only reset dropdowns' values
     filter_label.classList.remove('changed')
     sort_label.classList.remove('changed')
+    hideResetBtn();
     updateArraysFromSettings();
     refreshCards();
 });

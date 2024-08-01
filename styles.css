@@ -204,6 +204,11 @@ select#sort {
     border-radius: 50%;
     text-align: center;
     background-color: #ffffff;
+
+    transform: scale(0);
+    transform-origin: center;
+    position: absolute;
+    transition: all 0.2s linear;
 }
 
 /*Card Container*/
