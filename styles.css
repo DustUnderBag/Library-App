@@ -32,8 +32,6 @@ p, h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
 }
 
-
-
 /*Variables*/
 :root {
     --book-outer-border-radius: 5px;
@@ -50,25 +48,83 @@ p, h1, h2, h3, h4, h5, h6 {
 body {
     font-family: 'Playfair Display', 'Times New Roman', Times, serif;
     letter-spacing: 1px;
+
+
+    min-width: 375px;
 }
 
 select {
     text-align: center;
 }
 
-main {
-    width: 80%;
-}
-
 .invalid {
     border: 2px red solid;
 }
 
-/*flex layout for header*/
+header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    
+    width: 80%;
+    margin-inline: auto;
+    margin-top: 50px;
+    margin-bottom: 24px;
+    padding: 16px 70px;
+
+    box-shadow: 0 0px 10px #000000af;
+    border-radius: 50px;
+}
+
+main {
+    width: 70%;
+    margin-inline: auto;
+}
+
+header > img.user-icon {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 50%;
+}
+
+/*flex layout for settings container*/
 .settings {
     display: flex;
     gap: 15px;
     align-items: center;
+    margin-bottom: 24px;
+}
+
+button#add-book {
+    width: 32px;
+    height: 32px;
+    background: url(./img/add-icon.svg) #fff;
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border: 1px solid var(--input-border-color);
+    border-radius: 25px;
+
+    margin-right: 0;
+    margin-left: auto;
+    padding-left: 25px;
+    text-align: center;
+    font-size: 0;
+
+    transition: all 0.1s linear;
+
+    &:hover,
+    &:active,
+    &:focus {
+        width: 140px;
+        border-radius: 25px;
+        background-position: 15% 50%;
+        background-color: #acacac7c;
+        font-size: 1rem;
+        color: #000;
+    }
 }
 
 /*Sort & Filter buttons*/
