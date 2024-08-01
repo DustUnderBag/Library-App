@@ -11,31 +11,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Library</h1>
+    <header>
+        <h1>Library</h1>
+    </header>
 
-    <div class="header">
-        <button class="reset-settings"></button>
+    <main>
+        <div class="settings">
+            <button class="reset-settings"></button>
+            <label for="sort">
+                <span></span>
+                <select name="sort" id="sort">
+                    <option value="timeAdded">Last added</option>
+                    <option value="author">Author</option>
+                    <option value="title">Title</option>
+                </select>
+            </label>
+            <label for="filter-progress">
+                <select name="filterProgress" id="filter-progress">
+                    <option value="all">All progress</option>
+                    <option value="unread">Not started</option>
+                    <option value="reading">In progress</option>
+                    <option value="read">Finished</option>
+                </select>
+            </label>
+        </div>
+        <button id="add-book">NEW BOOK</button>
+        
+        <div class="cards-container">
+        </div>
+    </main>
 
-        <label for="sort">
-            <span></span>
-            <select name="sort" id="sort">
-                <option value="timeAdded">Last added</option>
-                <option value="author">Author</option>
-                <option value="title">Title</option>
-            </select>
-        </label>
-
-        <label for="filter-progress">
-            <select name="filterProgress" id="filter-progress">
-                <option value="all">All progress</option>
-                <option value="unread">Not started</option>
-                <option value="reading">In progress</option>
-                <option value="read">Finished</option>
-            </select>
-        </label>
-    </div>
-
-    <button id="add-book">NEW BOOK</button>
     <dialog class="book-modal">
         <h1>Add book</h1>
         <form method="post">
@@ -80,11 +85,6 @@
             </div>
         </form>
     </dialog>
-
-    <div class="cards-container">
-
-    </div>
-
 
     <dialog class="edit-modal">
         <h1>Edit book</h1>

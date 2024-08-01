@@ -59,14 +59,14 @@ body {
 }
 
 /*flex layout for header*/
-.header {
+.settings {
     display: flex;
     gap: 15px;
     align-items: center;
 }
 
 /*Sort & Filter buttons*/
-.header select{
+.settings select{
     appearance: none;
     -webkit-appearance: none;
     outline: none;
@@ -98,14 +98,14 @@ body {
     }
 }
 
-.header label.changed select { 
+.settings label.changed select { 
     background-color: var(--select-bg-changed-color);
     border-color: var(--select-bg-changed-color);
     color: var(--select-text-color);
     font-weight: 500;
 }
 
-.header label[for="sort"] {
+.settings label[for="sort"] {
     position: relative;
 }
 
@@ -129,7 +129,7 @@ select#sort {
 }
 
 /*Reset button of sort & filter*/
-.header > .reset-settings {
+.settings > .reset-settings {
     flex-shrink: 0;
     width: 28px;;
     height: 28px;
@@ -147,10 +147,8 @@ select#sort {
 /*Card Container*/
 .cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    justify-content: space-between;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
-
     width: 80%;
     min-width: 500px;
 }
