@@ -32,9 +32,7 @@ p, h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
 }
 
-select {
-    text-align: center;
-}
+
 
 /*Variables*/
 :root {
@@ -52,6 +50,14 @@ select {
 body {
     font-family: 'Playfair Display', 'Times New Roman', Times, serif;
     letter-spacing: 1px;
+}
+
+select {
+    text-align: center;
+}
+
+main {
+    width: 80%;
 }
 
 .invalid {
@@ -147,7 +153,7 @@ select#sort {
 /*Card Container*/
 .cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
     gap: 20px;
     width: 80%;
     min-width: 500px;
@@ -156,9 +162,7 @@ select#sort {
 /*Card book cover*/
 .card {
     position: relative;
-
-    max-width: 270px;
-    height: 350px;
+    height: 360px;
 
     border-radius: var(--book-outer-border-radius);
     border:solid var(--book-border-width) transparent;
