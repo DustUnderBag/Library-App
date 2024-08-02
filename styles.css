@@ -54,7 +54,7 @@ body {
 }
 
 select {
-    text-align: center;
+    text-align-last: center;
 }
 
 .invalid {
@@ -146,12 +146,6 @@ button#add-book {
     &:focus {
         color: #000000;
         background-color: #d4d4d477;
-    }
-
-    &:active {
-        border-bottom-color: transparent;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
     }
 
     & option {
@@ -293,13 +287,6 @@ select#sort {
 
     &:hover {
         background-color: #00000050;
-    }
-
-    &:active {
-        border-bottom-color: transparent;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-
     }
 
     & > option {
