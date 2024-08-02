@@ -42,7 +42,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
     --input-border-color: #383838;
     --select-bg-changed-color: #a5b8af;
-    --select-text-color: #161f1b;
+    --select-text-color: #0d3b27;
 }
 
 body {
@@ -67,11 +67,11 @@ header {
     justify-content: space-between;
     gap: 2rem;
     
-    width: 80%;
+    width: 85%;
     margin-inline: auto;
     margin-top: 50px;
     margin-bottom: 24px;
-    padding: 16px 70px;
+    padding: 16px 5%;
 
     box-shadow: 0 0px 10px #000000af;
     border-radius: 50px;
@@ -100,11 +100,12 @@ header > img.user-icon {
 button#add-book {
     width: 32px;
     height: 32px;
-    background: url(./img/add-icon.svg) #fff;
+    color: var(--select-text-color);
+    background: url(./img/add-icon.svg) var(--select-bg-changed-color);
     background-size: 24px;
     background-repeat: no-repeat;
     background-position: 50%;
-    border: 1px solid var(--input-border-color);
+    border: 1px solid var(--select-text-color);
     border-radius: 25px;
 
     margin-right: 0;
@@ -121,9 +122,7 @@ button#add-book {
         width: 140px;
         border-radius: 25px;
         background-position: 15% 50%;
-        background-color: #acacac7c;
         font-size: 1rem;
-        color: #000;
     }
 }
 
@@ -156,7 +155,7 @@ button#add-book {
 
 .settings label.changed select { 
     background-color: var(--select-bg-changed-color);
-    border-color: var(--select-bg-changed-color);
+    border-color: var(--select-text-color);
     color: var(--select-text-color);
     font-weight: 500;
 }
