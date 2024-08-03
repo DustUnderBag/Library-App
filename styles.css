@@ -387,6 +387,38 @@ dialog button {
     border: 1px solid var(--input-border-color);
 }
 
+.form-row .star-wrapper,
+.form-row .edit-star-wrapper  {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+}
+
+ .star-wrapper > .star,
+ .edit-star-wrapper > .edit-star  {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+
+    background: url(./img/rating-icon.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    &:hover {
+        background-image: url(./img/rating-changed-icon.svg);
+        background-color: #3493ca;
+    }
+}
+
+.star-wrapper .selected,
+.edit-star-wrapper .selected  {
+    background-image: url(./img/rating-changed-icon.svg);
+    background-color: #3493ca;
+}
+
+
 .book-modal button,
 .edit-modal button {
     height: 2.6rem;

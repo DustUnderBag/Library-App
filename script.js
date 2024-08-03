@@ -9,6 +9,9 @@ const input_progress = document.querySelector("select#progress");
 
 const inputs_Validate = [input_title, input_author, input_pages]; //Store inputs for validation in an array
 
+const starWrapper = document.querySelector('.star-wrapper');
+const stars = document.querySelectorAll('.star')
+
 const btn_submit = document.querySelector("button.submit");
 const btn_cancel = document.querySelector("button.cancel");
 
@@ -18,6 +21,9 @@ const edit_title = document.querySelector('#edit-title');
 const edit_author = document.querySelector('#edit-author');
 const edit_pages = document.querySelector('#edit-pages');
 const edit_progress = document.querySelector('#edit-progress');
+
+const edit_starWrapper = document.querySelector('.edit-star-wrapper');
+const edit_stars = document.querySelectorAll('.edit-star');
 
 const btn_edit_submit = document.querySelector("button#edit-submit");
 const btn_edit_Cancel = document.querySelector("button#edit-cancel");
@@ -158,6 +164,36 @@ function createCardsFromLibrary(array) {
         card_DOM.appendChild(delete_btn);
         card_DOM.appendChild(edit_btn);
     } );
+}
+
+starWrapper.addEventListener('click', ratingHandler);
+edit_starWrapper.addEventListener('click', ratingHandler);
+
+function ratingHandler(e) {
+    deselectStars();
+
+    const target = e.target;
+    let index = +target.id.slice(target.id.length - 1);
+
+    let rateCount = index;
+
+    for(let i = 1; i <= rateCount; i++) {
+        //If star is from edit modal, prefix its id with "edit-"
+        let starId = (target.className === "edit-star")
+                     ? "edit-" + i
+                     : i; 
+        document.getElementById(starId).classList.add('selected');
+    }
+}
+
+function deselectStars() {
+    for(let star of stars) {
+        star.classList.remove('selected');
+    }
+
+    for(let star of edit_stars) {
+        star.classList.remove('selected');
+    }
 }
 
 btn_submit.addEventListener('click', e => {
