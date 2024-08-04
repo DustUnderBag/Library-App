@@ -71,14 +71,6 @@ Book.prototype.addBookToLibrary = function() {
     console.log("Book: " + this.title);
 }
 
-function getRating() {
-    const checkedStar = document.querySelector('.star:checked');
-    if(!checkedStar) return 0; //In case no star is checked / does not exist.
-
-    let rating = +checkedStar.value;
-    return rating;
-}
-
 btn_newBook.addEventListener('click', () => {
     modal.showModal();
 });
@@ -188,25 +180,51 @@ function createCardsFromLibrary(array) {
     } );
 }
 
-starWrapper.addEventListener('click', ratingHandler);
-edit_starWrapper.addEventListener('click', ratingHandler);
+starWrapper.addEventListener('click', e => {
+    uncheckStars();
+    ratingHandler(e);
+});
+
+edit_starWrapper.addEventListener('click', e => {
+    uncheckEditStars();
+    ratingHandler(e);
+});
 
 function ratingHandler(e) {
     e.preventDefault(); //prevent clicked input from triggering its label.
-
-    uncheckStars();
     
     const label = e.target;
     const target = label.previousElementSibling;
 
     let rating = target.value;
     if( !rating ) rating = 0;
-    
     target.checked = true;
+}
+
+function getRating() {
+    const checkedStar = document.querySelector('.star:checked');
+    if(!checkedStar) return 0; //In case no star is checked / does not exist.
+
+    let rating = +checkedStar.value;
+    return rating;
+}
+
+function updateRating() {
+    const checkedStar = document.querySelector('.edit-star:checked');
+    if(!checkedStar) return 0; //In case no star is checked / does not exist.
+
+    let rating = +checkedStar.value;
+    return rating;
 }
 
 function uncheckStars() {
     for(let star of stars) {
+        star.checked = false;
+    }
+}
+
+function uncheckEditStars() {
+    for(let star of edit_stars) {
         star.checked = false;
     }
 }
@@ -265,11 +283,16 @@ function showEditModal() {
     let author = myLibrary[pos].author;
     let pages = myLibrary[pos].pages;
     let progress = myLibrary[pos].progress;
+    let rating = myLibrary[pos].rating;
 
     edit_title.value = title;
     edit_author.value = author;
     edit_pages.value = pages;
     edit_progress.value = progress;
+
+    const checkedStar = document.querySelector(`.edit-star[value= "${rating}" ]`);
+    checkedStar.checked = true;
+
     edit_modal.show();    
 }
 
@@ -281,7 +304,8 @@ function submitEdit() {
     myLibrary[pos].author = edit_author.value;
     myLibrary[pos].pages = edit_pages.value;
     myLibrary[pos].progress = edit_progress.value;
-
+    myLibrary[pos].rating = updateRating();
+    
     updateArraysFromSettings();
     refreshCards();
 
