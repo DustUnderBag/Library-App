@@ -43,11 +43,13 @@ const myLibrary = [];
 let filtered = [];
 let sorted = [];
 
-function Book(title, author, pages, progress) {
+function Book(title, author, pages, progress, rating) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.progress = progress;
+    this.rating = rating;
+
     this.timeAdded = Math.floor( Date.now() / 1000 );
     this.identifier = Math.floor( Math.random() * 100000 ); // Generate random unique Idex.
 }
@@ -69,6 +71,14 @@ Book.prototype.addBookToLibrary = function() {
     console.log("Book: " + this.title);
 }
 
+function getRating() {
+    const checkedStar = document.querySelector('.star:checked');
+    if(!checkedStar) return 0; //In case no star is checked / does not exist.
+
+    let rating = +checkedStar.value;
+    return rating;
+}
+
 btn_newBook.addEventListener('click', () => {
     modal.showModal();
 });
@@ -78,8 +88,9 @@ function createNewBook() {
     let author = input_author.value;
     let pages = input_pages.value;
     let progress = input_progress.value;
-    
-    let temp_obj = new Book(title, author, pages, progress);
+    let rating = getRating();
+
+    let temp_obj = new Book(title, author, pages, progress, rating);
     return temp_obj;
 }
 
@@ -91,6 +102,7 @@ function clearFormInputs() {
         input.classList.remove('valid');
     }
     input_progress.value = "unread";
+    uncheckStars();
 }
 
 function createCardsFromLibrary(array) {
@@ -172,25 +184,19 @@ edit_starWrapper.addEventListener('click', ratingHandler);
 function ratingHandler(e) {
     e.preventDefault(); //prevent clicked input from triggering its label.
 
-    deselectStars();
+    uncheckStars();
     
     const label = e.target;
     const target = label.previousElementSibling;
-    console.log(target);
+
     let rating = target.value;
     if( !rating ) rating = 0;
-
-   console.log("rating: " + rating);
+    
+    console.log("rating: " + rating);
     target.checked = true;
-   /*
-    for(let i = 1; i <= rating; i++) {
-        let index = "r" + i;
-        document.getElementById(index).checked = true;
-    } */
-    console.log(target.checked);
 }
 
-function deselectStars() {
+function uncheckStars() {
     for(let star of stars) {
         star.checked = false;
     }
@@ -433,11 +439,11 @@ function sort_books(array, property) {
 
 
 // Default Books
-let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read");
-let book2 = new Book("Ulysses", "James Joyce", 560, "reading");
-let book3 = new Book("Nineteen Eighty Four", "George Orwell", 449, "unread");
-let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, "reading");
-let book5 = new Book("In Search of Lost Time", "Marcel Proust", 4215, "read");
+let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read", 4);
+let book2 = new Book("Ulysses", "James Joyce", 560, "reading", 3);
+let book3 = new Book("Nineteen Eighty Four", "George Orwell", 449, "unread", 5);
+let book4 = new Book("The Handmaid's Tale", "Margaret Atwood", 370, "reading", 2);
+let book5 = new Book("In Search of Lost Time", "Marcel Proust", 4215, "read", 1);
 
 //Set made-up time stamp of books being added.
 book1.timeAdded = 5;
