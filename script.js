@@ -434,7 +434,9 @@ reset_btn.addEventListener('click', e => {
 });
 
 function updateArraysFromSettings() {
+    //Create filtered array from myLibrary, based on selected filter setting.
     filtered = filter_books(myLibrary, filter_dropdown.value);
+    //Create sorted array from filtered, based on selected sort setting.
     sorted = sort_books(filtered, sort_dropdown.value);
 }
 
@@ -452,8 +454,8 @@ function filter_books(array, progress) { //Non-mutating
     if(progress == "all") { //return original array if all progress.
         return myLibrary;
     }else { 
-        return array.filter( book => (book.progress == progress)) 
-    };
+        return array.filter( book => (book.progress == progress));
+    }
 }
 
 function sort_books(array, property) {
