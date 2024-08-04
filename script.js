@@ -172,6 +172,16 @@ function createCardsFromLibrary(array) {
         bookInfo_DOM.appendChild(author_DOM);
         bookInfo_DOM.appendChild(pages_DOM);
 
+        //Create rating stars then append to card.
+        console.log(book.rating);
+        const starWrapper = document.createElement('div');
+        starWrapper.classList.add('card-star-wrapper');
+        bookInfo_DOM.appendChild(starWrapper);
+        for(let i = 1; i <= book.rating; i++ ) {
+            const star = document.createElement('div');
+            star.classList.add('card-star');
+            starWrapper.appendChild(star);            
+        }
         card_DOM.appendChild(progress_DOM);
         card_DOM.appendChild(delete_btn);
         card_DOM.appendChild(edit_btn);

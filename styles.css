@@ -43,6 +43,7 @@ p, h1, h2, h3, h4, h5, h6 {
     --input-border-color: #383838;
     --select-bg-changed-color: #a5b8af;
     --select-text-color: #0d3b27;
+    --star-highlight-color: #ffd000;
 }
 
 body {
@@ -407,29 +408,52 @@ dialog button{
 }
 
 
+
  .star-wrapper > label,
  .edit-star-wrapper > label {
     cursor: pointer;
     width: 32px;
     height: 32px;
 
-    border-radius: 50%;
-
     background: url(./img/rating-icon.svg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
 
-    &:hover {
+    transition: transform 0.2s linear;
+
+    &:hover,
+    &:has(~ :hover)  {
         background-image: url(./img/rating-changed-icon.svg);
-        background-color: #3493ca;
+    }
+
+    &:hover{
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 3px rgba(238, 204, 15, 0.822));
     }
 }
 
 input[type='radio']:checked + label,
 input[type='radio']:has(~ :checked) + label { /*Previous */
     background-image: url(./img/rating-changed-icon.svg);
-    background-color: #3493ca;
+}
+
+.card-star-wrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.card-star {
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background-image: url(./img/rating-changed-icon.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .book-modal button,
