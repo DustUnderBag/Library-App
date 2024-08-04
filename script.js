@@ -10,7 +10,7 @@ const input_progress = document.querySelector("select#progress");
 const inputs_Validate = [input_title, input_author, input_pages]; //Store inputs for validation in an array
 
 const starWrapper = document.querySelector('.star-wrapper');
-const stars = document.querySelectorAll('.star')
+const stars = document.querySelectorAll('input.star')
 
 const btn_submit = document.querySelector("button.submit");
 const btn_cancel = document.querySelector("button.cancel");
@@ -170,29 +170,29 @@ starWrapper.addEventListener('click', ratingHandler);
 edit_starWrapper.addEventListener('click', ratingHandler);
 
 function ratingHandler(e) {
+    e.preventDefault(); //prevent clicked input from triggering its label.
+
     deselectStars();
+    
+    const label = e.target;
+    const target = label.previousElementSibling;
+    console.log(target);
+    let rating = target.value;
+    if( !rating ) rating = 0;
 
-    const target = e.target;
-    let index = +target.id.slice(target.id.length - 1);
-
-    let rateCount = index;
-
-    for(let i = 1; i <= rateCount; i++) {
-        //If star is from edit modal, prefix its id with "edit-"
-        let starId = (target.className === "edit-star")
-                     ? "edit-" + i
-                     : i; 
-        document.getElementById(starId).classList.add('selected');
-    }
+   console.log("rating: " + rating);
+    target.checked = true;
+   /*
+    for(let i = 1; i <= rating; i++) {
+        let index = "r" + i;
+        document.getElementById(index).checked = true;
+    } */
+    console.log(target.checked);
 }
 
 function deselectStars() {
     for(let star of stars) {
-        star.classList.remove('selected');
-    }
-
-    for(let star of edit_stars) {
-        star.classList.remove('selected');
+        star.checked = false;
     }
 }
 

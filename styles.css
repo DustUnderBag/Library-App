@@ -376,7 +376,7 @@ dialog.edit-modal {
 
 dialog input,
 dialog select,
-dialog button {
+dialog button{
     font-family: Roboto, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', sans-serif;
 
     height: 2.2rem;
@@ -387,15 +387,29 @@ dialog button {
     border: 1px solid var(--input-border-color);
 }
 
+.form-row > span {
+    text-align: right;
+}
+
 .form-row .star-wrapper,
 .form-row .edit-star-wrapper  {
     display: flex;
-    justify-content: start;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
 }
 
- .star-wrapper > .star,
- .edit-star-wrapper > .edit-star  {
+.star-wrapper > input[type='radio'],
+.edit-star-wrapper > input[type='radio'] {
+    appearance: none;
+    -webkit-appearance: none;
+    display: none;
+}
+
+
+ .star-wrapper > label,
+ .edit-star-wrapper > label {
+    cursor: pointer;
     width: 32px;
     height: 32px;
 
@@ -412,12 +426,11 @@ dialog button {
     }
 }
 
-.star-wrapper .selected,
-.edit-star-wrapper .selected  {
+input[type='radio']:checked + label,
+input[type='radio']:has(~ :checked) + label { /*Previous */
     background-image: url(./img/rating-changed-icon.svg);
     background-color: #3493ca;
 }
-
 
 .book-modal button,
 .edit-modal button {
