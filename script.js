@@ -165,7 +165,6 @@ function createCardsFromLibrary(array) {
         bookInfo_DOM.appendChild(pages_DOM);
 
         //Create rating stars then append to card.
-        console.log(book.rating);
         const starWrapper = document.createElement('div');
         starWrapper.classList.add('card-star-wrapper');
         bookInfo_DOM.appendChild(starWrapper);
@@ -313,7 +312,7 @@ function submitEdit() {
     edit_author.value = null;
     edit_pages.value = null;
     edit_progress.value = 'unread';
-
+    uncheckEditStars();
     edit_modal.close();
 }
 
