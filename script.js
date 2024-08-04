@@ -192,7 +192,6 @@ function ratingHandler(e) {
     let rating = target.value;
     if( !rating ) rating = 0;
     
-    console.log("rating: " + rating);
     target.checked = true;
 }
 
