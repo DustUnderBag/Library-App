@@ -244,7 +244,6 @@ btn_submit.addEventListener('click', e => {
     updateArraysFromSettings();
     refreshCards();
     
-    clearFormInputs();
     modal.close();
     
     e.preventDefault(); //prevent submitting the form to server.
@@ -253,6 +252,8 @@ btn_submit.addEventListener('click', e => {
 btn_cancel.addEventListener('click', () => {
     modal.close();
 });
+
+modal.addEventListener('close', clearFormInputs);
 
 function deleteBook() {
     let idf = this.getAttribute('data-identifier'); //Locate book identifier inside myLibrary[]  
