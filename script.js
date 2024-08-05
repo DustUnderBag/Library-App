@@ -292,7 +292,7 @@ function showEditModal() {
     const checkedStar = document.querySelector(`.edit-star[value= "${rating}" ]`);
     checkedStar.checked = true;
 
-    edit_modal.show();    
+    edit_modal.showModal();    
 }
 
 function submitEdit() {
