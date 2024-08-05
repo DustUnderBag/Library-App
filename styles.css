@@ -67,29 +67,39 @@ select {
 header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+    justify-content: start;
+    gap: 10px;
     
     width: 95%;
     min-width: 300px;
 
     margin-top: 50px;
     margin-bottom: 24px;
-    padding: 16px 5%;
+    padding: 16px 40px;
 
     box-shadow: 0 0px 10px #000000af;
     border-radius: 50px;
 }
 
-main {
-    width: 90%;
+header h1 {
+    font-size: 2rem;
 }
 
-header > img.user-icon {
+img.library-icon {
+    width: 4rem;
+}
+
+img.user-icon {
     width: 48px;
     height: 48px;
     border: 1px solid var(--input-border-color);
     border-radius: 50%;
+    margin-right: 0;
+    margin-left: auto;
+}
+
+main {
+    width: 90%;
 }
 
 /*flex layout for settings container*/
@@ -306,6 +316,10 @@ select#sort {
 @media screen and (max-width: 700px) {
     header h1{
         font-size: 1.5rem;
+    }
+
+    header img.library-icon {
+        width: 3rem;
     }
 
     .cards-container {
