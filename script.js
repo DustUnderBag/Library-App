@@ -43,6 +43,13 @@ const myLibrary = [];
 let filtered = [];
 let sorted = [];
 
+class Library {
+    static addBookToLibrary(book) {
+        myLibrary.push(book);
+        console.log("Book: " + book.title);
+    }
+
+}
 /*
 function Book(title, author, pages, progress, rating) {
     this.title = title;
@@ -97,10 +104,7 @@ class Book {
         return `${this.title} by ${this.author} has ${this.pages} pages. Reading ${progress_str}.`;
     }
 
-    addBookToLibrary() {
-        myLibrary.push(this);
-        console.log("Book: " + this.title);
-    }
+
 }
 
 
@@ -130,8 +134,8 @@ function clearFormInputs() {
     uncheckStars();
 }
 
-function createCardsFromLibrary(array) {
-    array.forEach( book => {
+function createCardsFromLibrary(library) {
+    library.forEach( book => {
         let identifier = book.identifier;
         const card_DOM = document.createElement('div');
         card_DOM.classList.add('card');
@@ -272,7 +276,8 @@ btn_submit.addEventListener('click', e => {
         return;
     }
 
-    createNewBook().addBookToLibrary(); //Create book obj then store in the library[]
+    let book = createNewBook();
+    Library.addBookToLibrary(book); //Create book obj then store in the library[]
 
     updateArraysFromSettings();
     refreshCards();
@@ -521,11 +526,11 @@ book4.timeAdded = 2;
 book5.timeAdded = 1;
 
 //Added default books to myLibrary.
-book1.addBookToLibrary();
-book2.addBookToLibrary();
-book3.addBookToLibrary();
-book4.addBookToLibrary();
-book5.addBookToLibrary();
+Library.addBookToLibrary(book1);
+Library.addBookToLibrary(book2);
+Library.addBookToLibrary(book3);
+Library.addBookToLibrary(book4);
+Library.addBookToLibrary(book5);
 
 filtered = filter_books(myLibrary, filter_dropdown.value);
 sorted = sort_books(filtered, sort_dropdown.value);
