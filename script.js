@@ -44,41 +44,47 @@ let filtered = [];
 let sorted = [];
 
 class Library {
+
     static addBookToLibrary(book) {
         myLibrary.push(book);
         console.log("Book: " + book.title);
     }
 
-}
-/*
-function Book(title, author, pages, progress, rating) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.progress = progress;
-    this.rating = rating;
 
-    this.timeAdded = Math.floor( Date.now() / 1000 );
-    this.identifier = Math.floor( Math.random() * 100000 ); // Generate random unique Idex.
-}
-
-Book.prototype.getInfo = function() {
-    let progress_str;
-    if(this.progress == "unread") {
-        progress_str = "hasn't started";
-    }else if(this.progress == "reading") {
-        progress_str = "is in progress";
-    }else {
-        progress_str = "is finished";
+    static getPosFromIdentifier(identifier) {
+        return myLibrary.findIndex( book => book.identifier == identifier);
     }
-    return `${this.title} by ${this.author} has ${this.pages} pages. Reading ${progress_str}.`;
-}
 
-Book.prototype.addBookToLibrary = function() {
-    myLibrary.push(this);
-    console.log("Book: " + this.title);
+    static deleteBook(identifier) {
+        console.log('data-identifier: ' + identifier);
+    
+        let pos = this.getPosFromIdentifier(identifier);
+        console.log(`position: ${pos}, title: ${myLibrary[pos].title}.` );
+    
+        if(pos >= 0) { //Execute only if valid position is returned.
+            myLibrary.splice(pos, 1);
+    
+            updateArraysFromSettings();
+            refreshCards();
+        }
+    }
+
+    static setProgress(identifier, progress) {
+        console.log('data-identifier: ' + identifier);
+    
+        let pos = this.getPosFromIdentifier(identifier);
+    
+        if(pos >= 0) { //Execute only if valid position is returned.
+            myLibrary[pos].progress = progress;
+            console.log(`${myLibrary[pos].title}'s(identifier:${identifier}) 
+                progress has been set to ${myLibrary[pos].progress}.`
+            );
+        }
+    
+        updateArraysFromSettings();
+        refreshCards();
+    }
 }
-*/
 
 class Book {
     constructor(title, author, pages, progress, rating){
@@ -103,7 +109,6 @@ class Book {
         }
         return `${this.title} by ${this.author} has ${this.pages} pages. Reading ${progress_str}.`;
     }
-
 
 }
 
@@ -178,13 +183,13 @@ function createCardsFromLibrary(library) {
         progress_DOM.appendChild(read_opt);
 
         progress_DOM.value = book.progress;
-        progress_DOM.addEventListener('change', setProgress);
+        progress_DOM.addEventListener('change', progressHandler);
     
         //Delete button
         const delete_btn = document.createElement('button');
         delete_btn.classList.add('delete-btn');
         delete_btn.setAttribute('data-identifier', identifier);
-        delete_btn.addEventListener('click', deleteBook);
+        delete_btn.addEventListener('click', deleteHandler);
         
         //Edit button
         const edit_btn = document.createElement('button');
@@ -293,27 +298,12 @@ btn_cancel.addEventListener('click', () => {
 
 modal.addEventListener('close', clearFormInputs);
 
-function deleteBook() {
-    let idf = this.getAttribute('data-identifier'); //Locate book identifier inside myLibrary[]  
-    console.log('data-identifier: ' + idf);
-
-    let pos = getPosFromIdentifier(idf);
-    console.log(`position: ${pos}, title: ${myLibrary[pos].title}.` );
-
-    if(pos >= 0) { //Execute only if valid position is returned.
-        myLibrary.splice(pos, 1);
-
-        updateArraysFromSettings();
-        refreshCards();
-    }
-}
-
 btn_edit_submit.addEventListener('click', submitEdit);
 btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
 
 function showEditModal() {
     let idf = this.getAttribute('data-identifier');
-    let pos = getPosFromIdentifier(idf);
+    let pos = Library.getPosFromIdentifier(idf);
     console.log(`Editing ${myLibrary[pos].title}.`);
     btn_edit_submit.setAttribute('data-identifier', idf); //Indicate identifier for submit button.
 
@@ -336,7 +326,7 @@ function showEditModal() {
 
 function submitEdit() {
     let idf = this.getAttribute('data-identifier');
-    let pos = getPosFromIdentifier(idf);
+    let pos = Library.getPosFromIdentifier(idf);
 
     myLibrary[pos].title = edit_title.value;
     myLibrary[pos].author = edit_author.value;
@@ -353,11 +343,6 @@ function submitEdit() {
     edit_progress.value = 'unread';
     uncheckEditStars();
     edit_modal.close();
-}
-
-
-function getPosFromIdentifier(identifier) {
-    return myLibrary.findIndex( book => book.identifier == identifier);
 }
 
 function clearCardContainer() {
@@ -392,20 +377,17 @@ function validateForm() {
     return allVaild;
 }
 
-function setProgress() {
+function deleteHandler() {
     let identifier = this.getAttribute('data-identifier');
-    let position = getPosFromIdentifier(identifier);
-
-    if(position >= 0) { //Execute only if valid position is returned.
-        myLibrary[position].progress = this.value;
-        console.log(`${myLibrary[position].title}'s(identifier:${identifier}) 
-            progress has been set to ${myLibrary[position].progress}.`
-        );
-    }
-
-    updateArraysFromSettings();
-    refreshCards();
+    Library.deleteBook(identifier);
 }
+
+function progressHandler() {
+    let identifier = this.getAttribute('data-identifier');
+    Library.setProgress(identifier, this.value);
+}
+
+
 
 //Filter & Sorting settings
 filter_dropdown.addEventListener('change', e => {
