@@ -84,6 +84,32 @@ class Library {
         updateArraysFromSettings();
         refreshCards();
     }
+
+    static filterBooks(progress) { //Non-mutating
+        if(progress == "all") { //return original array if all progress.
+            return myLibrary;
+        }else { 
+            return myLibrary.filter( book => (book.progress == progress));
+        }
+    }
+
+    static sortBooks(array, property) {
+        /* Parameters
+           - Sort array(books) by comparing every title/author/timeAdded.
+           - property: refers to object property on which the comparison performs.
+         */
+        let array_clone = [...array]; //Clone input array to make the sort() non-mutating.
+        
+        //Compare string property
+        if(property == "title" || property == "author") { 
+            return array_clone.sort( (a, b) => 
+                a[property].localeCompare( b[property]) );
+        }
+        
+        //Compare numeric property
+        return array_clone.sort( (a, b) => b[property] - a[property] );
+    }
+    
 }
 
 class Book {
@@ -124,8 +150,7 @@ function createNewBook() {
     let progress = input_progress.value;
     let rating = getRating();
 
-    let temp_obj = new Book(title, author, pages, progress, rating);
-    return temp_obj;
+    return new Book(title, author, pages, progress, rating);
 }
 
 function clearFormInputs() {
@@ -455,9 +480,9 @@ reset_btn.addEventListener('click', e => {
 
 function updateArraysFromSettings() {
     //Create filtered array from myLibrary, based on selected filter setting.
-    filtered = filter_books(myLibrary, filter_dropdown.value);
+    filtered = Library.filterBooks(filter_dropdown.value);
     //Create sorted array from filtered, based on selected sort setting.
-    sorted = sort_books(filtered, sort_dropdown.value);
+    sorted = Library.sortBooks(filtered, sort_dropdown.value);
 }
 
 function resetSettings() {
@@ -469,29 +494,6 @@ function refreshCards() {
     clearCardContainer();
     createCardsFromLibrary(sorted);
 }
-
-function filter_books(array, progress) { //Non-mutating
-    if(progress == "all") { //return original array if all progress.
-        return myLibrary;
-    }else { 
-        return array.filter( book => (book.progress == progress));
-    }
-}
-
-function sort_books(array, property) {
-    /* Parameters
-       - Sort array(books) by comparing every title/author/timeAdded.
-       - property: refers to object property on which the comparison performs.
-     */
-    let array_clone = [...array]; //Clone input array to make the sort() non-mutating.
-    if(property == "title" || property == "author") {
-        return array_clone.sort( (a, b) => 
-            a[property].localeCompare( b[property]) );
-    } else {
-        return array_clone.sort( (a, b) => b[property] - a[property] );
-    }
-}
-
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read", 4);
@@ -514,6 +516,6 @@ Library.addBookToLibrary(book3);
 Library.addBookToLibrary(book4);
 Library.addBookToLibrary(book5);
 
-filtered = filter_books(myLibrary, filter_dropdown.value);
-sorted = sort_books(filtered, sort_dropdown.value);
+filtered = Library.filterBooks(filter_dropdown.value);
+sorted = Library.sortBooks(filtered, sort_dropdown.value);
 createCardsFromLibrary(sorted);
