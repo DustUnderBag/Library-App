@@ -136,6 +136,13 @@ class Book {
         return `${this.title} by ${this.author} has ${this.pages} pages. Reading ${progress_str}.`;
     }
 
+    edit(newTitle, newAuthor, newPages, newProgress, newRating) {
+        this.title = newTitle;
+        this.author = newAuthor;
+        this.pages = newPages;
+        this.progress = newProgress;
+        this.rating = newRating;
+    }
 }
 
 
@@ -323,7 +330,7 @@ btn_cancel.addEventListener('click', () => {
 
 modal.addEventListener('close', clearFormInputs);
 
-btn_edit_submit.addEventListener('click', submitEdit);
+btn_edit_submit.addEventListener('click', editHandler);
 btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
 
 function showEditModal() {
@@ -349,16 +356,16 @@ function showEditModal() {
     edit_modal.showModal();    
 }
 
-function submitEdit() {
+function editHandler() {
     let idf = this.getAttribute('data-identifier');
     let pos = Library.getPosFromIdentifier(idf);
 
-    myLibrary[pos].title = edit_title.value;
-    myLibrary[pos].author = edit_author.value;
-    myLibrary[pos].pages = edit_pages.value;
-    myLibrary[pos].progress = edit_progress.value;
-    myLibrary[pos].rating = updateRating();
-    
+    myLibrary[pos].edit(edit_title.value, 
+                        edit_author.value, 
+                        edit_pages.value, 
+                        edit_progress.value, 
+                        updateRating());
+
     updateArraysFromSettings();
     refreshCards();
 
