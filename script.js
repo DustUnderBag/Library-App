@@ -1,3 +1,6 @@
+import { Library } from "./Library.js";
+import { Book } from "./Book.js";
+
 //Add Book modal & inputs
 const btn_newBook = document.querySelector("button#add-book");
 
@@ -39,112 +42,8 @@ const filter_label = document.querySelector('label[for="filter-progress"]');
 const filter_dropdown = document.getElementById('filter-progress');
 const reset_btn = document.querySelector('button.reset-settings');
 
-const myLibrary = [];
 let filtered = [];
 let sorted = [];
-
-class Library {
-
-    static addBookToLibrary(book) {
-        myLibrary.push(book);
-        console.log("Book: " + book.title);
-    }
-
-
-    static getPosFromIdentifier(identifier) {
-        return myLibrary.findIndex( book => book.identifier == identifier);
-    }
-
-    static deleteBook(identifier) {
-        console.log('data-identifier: ' + identifier);
-    
-        let pos = this.getPosFromIdentifier(identifier);
-        console.log(`position: ${pos}, title: ${myLibrary[pos].title}.` );
-    
-        if(pos >= 0) { //Execute only if valid position is returned.
-            myLibrary.splice(pos, 1);
-    
-            updateArraysFromSettings();
-            refreshCards();
-        }
-    }
-
-    static setProgress(identifier, progress) {
-        console.log('data-identifier: ' + identifier);
-    
-        let pos = this.getPosFromIdentifier(identifier);
-    
-        if(pos >= 0) { //Execute only if valid position is returned.
-            myLibrary[pos].progress = progress;
-            console.log(`${myLibrary[pos].title}'s(identifier:${identifier}) 
-                progress has been set to ${myLibrary[pos].progress}.`
-            );
-        }
-    
-        updateArraysFromSettings();
-        refreshCards();
-    }
-
-    static filterBooks(progress) { //Non-mutating
-        if(progress == "all") { //return original array if all progress.
-            return myLibrary;
-        }else { 
-            return myLibrary.filter( book => (book.progress == progress));
-        }
-    }
-
-    static sortBooks(array, property) {
-        /* Parameters
-           - Sort array(books) by comparing every title/author/timeAdded.
-           - property: refers to object property on which the comparison performs.
-         */
-        let array_clone = [...array]; //Clone input array to make the sort() non-mutating.
-        
-        //Compare string property
-        if(property == "title" || property == "author") { 
-            return array_clone.sort( (a, b) => 
-                a[property].localeCompare( b[property]) );
-        }
-        
-        //Compare numeric property
-        return array_clone.sort( (a, b) => b[property] - a[property] );
-    }
-    
-}
-
-class Book {
-    constructor(title, author, pages, progress, rating){
-        this.title = title;
-        this.author = author;
-        this.pages = pages;
-        this.progress = progress;
-        this.rating = rating;
-
-        this.timeAdded = Math.floor( Date.now() / 1000 );
-        this.identifier = Math.floor( Math.random() * 100000 ); // Generate random unique Idex.
-    }
-
-    getInfo() {
-        let progress_str;
-        if(this.progress == "unread") {
-            progress_str = "hasn't started";
-        }else if(this.progress == "reading") {
-            progress_str = "is in progress";
-        }else {
-            progress_str = "is finished";
-        }
-        return `${this.title} by ${this.author} has ${this.pages} pages. Reading ${progress_str}.`;
-    }
-
-    edit(newTitle, newAuthor, newPages, newProgress, newRating) {
-        this.title = newTitle;
-        this.author = newAuthor;
-        this.pages = newPages;
-        this.progress = newProgress;
-        this.rating = newRating;
-    }
-}
-
 
 btn_newBook.addEventListener('click', () => {
     modal.showModal();
@@ -161,7 +60,7 @@ function createNewBook() {
 }
 
 function clearFormInputs() {
-    for(input of inputs_Validate) {
+    for(let input of inputs_Validate) {
         input.value = "";
 
         input.classList.remove('invalid');
@@ -336,14 +235,14 @@ btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
 function showEditModal() {
     let idf = this.getAttribute('data-identifier');
     let pos = Library.getPosFromIdentifier(idf);
-    console.log(`Editing ${myLibrary[pos].title}.`);
+    console.log(`Editing ${Library.myLibrary[pos].title}.`);
     btn_edit_submit.setAttribute('data-identifier', idf); //Indicate identifier for submit button.
 
-    let title = myLibrary[pos].title;
-    let author = myLibrary[pos].author;
-    let pages = myLibrary[pos].pages;
-    let progress = myLibrary[pos].progress;
-    let rating = myLibrary[pos].rating;
+    let title = Library.myLibrary[pos].title;
+    let author = Library.myLibrary[pos].author;
+    let pages = Library.myLibrary[pos].pages;
+    let progress = Library.myLibrary[pos].progress;
+    let rating = Library.myLibrary[pos].rating;
 
     edit_title.value = title;
     edit_author.value = author;
@@ -360,7 +259,7 @@ function editHandler() {
     let idf = this.getAttribute('data-identifier');
     let pos = Library.getPosFromIdentifier(idf);
 
-    myLibrary[pos].edit(edit_title.value, 
+    Library.myLibrary[pos].edit(edit_title.value, 
                         edit_author.value, 
                         edit_pages.value, 
                         edit_progress.value, 
@@ -397,7 +296,7 @@ function validatePagesNumber() {
 
 function validateForm() {
     let allVaild = true;
-    for(input of inputs_Validate) {
+    for(let input of inputs_Validate) {
         if(!input.value) {
             input.classList.add('invalid'); // //To-Do: Insert alert message below this input with CSS.
             input.focus();
@@ -486,7 +385,7 @@ reset_btn.addEventListener('click', e => {
 });
 
 function updateArraysFromSettings() {
-    //Create filtered array from myLibrary, based on selected filter setting.
+    //Create filtered array from Library.myLibrary, based on selected filter setting.
     filtered = Library.filterBooks(filter_dropdown.value);
     //Create sorted array from filtered, based on selected sort setting.
     sorted = Library.sortBooks(filtered, sort_dropdown.value);
@@ -516,7 +415,7 @@ book3.timeAdded = 3;
 book4.timeAdded = 2;
 book5.timeAdded = 1;
 
-//Added default books to myLibrary.
+//Added default books to Library.myLibrary.
 Library.addBookToLibrary(book1);
 Library.addBookToLibrary(book2);
 Library.addBookToLibrary(book3);
