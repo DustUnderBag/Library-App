@@ -1,22 +1,21 @@
 import { Library } from "./Library.js";
 import { Book } from "./Book.js";
 
+import { validateForm, validatePagesNumber, inputs_Validate } from "./form-validate.js";
+
 //Add Book modal & inputs
 const btn_newBook = document.querySelector("button#add-book");
 
 const modal = document.querySelector('dialog.book-modal');
-const input_title = document.querySelector("input#title");
-const input_author = document.querySelector("input#author");
-const input_pages = document.querySelector("input#pages");
-const input_progress = document.querySelector("select#progress");
 
-const inputs_Validate = [input_title, input_author, input_pages]; //Store inputs for validation in an array
 
 const starWrapper = document.querySelector('.star-wrapper');
 const stars = document.querySelectorAll('input.star')
 
 const btn_submit = document.querySelector("button.submit");
 const btn_cancel = document.querySelector("button.cancel");
+
+const input_pages = document.querySelector("input#pages");
 
 //Edit Book modal & inputs
 const edit_modal = document.querySelector('dialog.edit-modal');
@@ -50,10 +49,10 @@ btn_newBook.addEventListener('click', () => {
 });
 
 function createNewBook() {
-    let title = input_title.value;
-    let author = input_author.value;
-    let pages = input_pages.value;
-    let progress = input_progress.value;
+    let title = document.querySelector("input#title").value;
+    let author =  document.querySelector("input#author").value;
+    let pages = document.querySelector("input#pages").value;
+    let progress = document.querySelector("select#progress").value;
     let rating = getRating();
 
     return new Book(title, author, pages, progress, rating);
@@ -66,7 +65,7 @@ function clearFormInputs() {
         input.classList.remove('invalid');
         input.classList.remove('valid');
     }
-    input_progress.value = "unread";
+    document.querySelector("select#progress").value = "unread";
     uncheckStars();
 }
 
@@ -284,30 +283,6 @@ function clearCardContainer() {
 
 input_pages.addEventListener('change', validatePagesNumber);
 
-function validatePagesNumber() {
-    if(input_pages.value <= 0) {
-        input_pages.classList.add('invalid'); //To-Do: Insert alert message below this input with CSS.
-        return false;
-    } else {
-        input_pages.classList.remove('invalid');
-        return true;
-    } 
-}
-
-function validateForm() {
-    let allVaild = true;
-    for(let input of inputs_Validate) {
-        if(!input.value) {
-            input.classList.add('invalid'); // //To-Do: Insert alert message below this input with CSS.
-            input.focus();
-            allVaild = false;
-        } else {
-            input.classList.remove('invalid');
-        }
-    }
-    return allVaild;
-}
-
 function deleteHandler() {
     let identifier = this.getAttribute('data-identifier');
     Library.deleteBook(identifier);
@@ -317,8 +292,6 @@ function progressHandler() {
     let identifier = this.getAttribute('data-identifier');
     Library.setProgress(identifier, this.value);
 }
-
-
 
 //Filter & Sorting settings
 filter_dropdown.addEventListener('change', e => {
