@@ -3,6 +3,7 @@ import { Book } from "./Book.js";
 
 import { validateForm, validatePagesNumber, inputs_Validate } from "./form-validate.js";
 import { updateArraysFromSettings } from "./book-sorter.js";
+import { refreshCards } from "./book-displayer.js";
 
 //Add Book modal & inputs
 const btn_newBook = document.querySelector("button#add-book");
@@ -69,87 +70,7 @@ function clearFormInputs() {
     uncheckStars();
 }
 
-function createCardsFromLibrary(library) {
-    library.forEach( book => {
-        let identifier = book.identifier;
-        const card_DOM = document.createElement('div');
-        card_DOM.classList.add('card');
-        card_DOM.setAttribute('data-identifier', identifier);
 
-        const bookInfo_DOM = document.createElement('div');
-        bookInfo_DOM.classList.add('book-info');
-    
-        const title_DOM = document.createElement('h2');
-        title_DOM.textContent = book.title;
-        title_DOM.classList.add('card-title');
-    
-        const author_DOM = document.createElement('p');
-        author_DOM.textContent = book.author;
-        author_DOM.classList.add('card-author');
-    
-        const pages_DOM = document.createElement('p');
-        pages_DOM.textContent = book.pages + ' pages';
-        pages_DOM.classList.add('card-pages');
-    
-        //To create dropdown menu for reading progress in cards
-        const progress_DOM = document.createElement("select");
-        progress_DOM.setAttribute("data-identifier", identifier);
-        progress_DOM.classList.add('card-progress')
-
-        //Create option elements for all progress states.
-        const unread_opt = document.createElement("option");
-        unread_opt.setAttribute("value", "unread");
-        unread_opt.append("Not started");
-        progress_DOM.appendChild(unread_opt);
-
-        const reading_opt = document.createElement("option");
-        reading_opt.setAttribute("value", "reading");
-        reading_opt.append("In progress");
-        progress_DOM.appendChild(reading_opt);
-
-        const read_opt = document.createElement("option");
-        read_opt.setAttribute("value", "read");
-        read_opt.append("Finished");
-        progress_DOM.appendChild(read_opt);
-
-        progress_DOM.value = book.progress;
-        progress_DOM.addEventListener('change', progressHandler);
-    
-        //Delete button
-        const delete_btn = document.createElement('button');
-        delete_btn.classList.add('delete-btn');
-        delete_btn.setAttribute('data-identifier', identifier);
-        delete_btn.addEventListener('click', deleteHandler);
-        
-        //Edit button
-        const edit_btn = document.createElement('button');
-        edit_btn.classList.add('edit-btn')
-        edit_btn.setAttribute('data-identifier', identifier);
-        edit_btn.addEventListener('click', showEditModal);
-    
-        //append elements to card
-        cards_container.appendChild(card_DOM); //card as container's child.
-
-        card_DOM.appendChild(bookInfo_DOM); //contentWrapper as card's child.
-        //append all contents to contentWrapper.
-        bookInfo_DOM.appendChild(title_DOM);
-        bookInfo_DOM.appendChild(author_DOM);
-        bookInfo_DOM.appendChild(pages_DOM);
-
-        //Create rating stars then append to card.
-        const starWrapper = document.createElement('div');
-        starWrapper.classList.add('card-star-wrapper');
-        bookInfo_DOM.appendChild(starWrapper);
-        for(let i = 1; i <= book.rating; i++ ) {
-            const star = document.createElement('div');
-            star.classList.add('card-star');
-            starWrapper.appendChild(star);            
-        }
-        card_DOM.appendChild(progress_DOM);
-        card_DOM.appendChild(delete_btn);
-        card_DOM.appendChild(edit_btn);
-    } );
-}
 
 starWrapper.addEventListener('click', e => {
     uncheckStars();
@@ -231,28 +152,7 @@ modal.addEventListener('close', clearFormInputs);
 btn_edit_submit.addEventListener('click', editHandler);
 btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
 
-function showEditModal() {
-    let idf = this.getAttribute('data-identifier');
-    let pos = Library.getPosFromIdentifier(idf);
-    console.log(`Editing ${Library.myLibrary[pos].title}.`);
-    btn_edit_submit.setAttribute('data-identifier', idf); //Indicate identifier for submit button.
 
-    let title = Library.myLibrary[pos].title;
-    let author = Library.myLibrary[pos].author;
-    let pages = Library.myLibrary[pos].pages;
-    let progress = Library.myLibrary[pos].progress;
-    let rating = Library.myLibrary[pos].rating;
-
-    edit_title.value = title;
-    edit_author.value = author;
-    edit_pages.value = pages;
-    edit_progress.value = progress;
-
-    const checkedStar = document.querySelector(`.edit-star[value= "${rating}" ]`);
-    checkedStar.checked = true;
-
-    edit_modal.showModal();    
-}
 
 function editHandler() {
     let idf = this.getAttribute('data-identifier');
@@ -275,23 +175,13 @@ function editHandler() {
     edit_modal.close();
 }
 
-function clearCardContainer() {
-    while(cards_container.firstElementChild) {
-        cards_container.removeChild(cards_container.lastElementChild);
-    }
-}
+
 
 input_pages.addEventListener('change', validatePagesNumber);
 
-function deleteHandler() {
-    let identifier = this.getAttribute('data-identifier');
-    Library.deleteBook(identifier);
-}
 
-function progressHandler() {
-    let identifier = this.getAttribute('data-identifier');
-    Library.setProgress(identifier, this.value);
-}
+
+
 
 //Filter & Sorting settings
 filter_dropdown.addEventListener('change', e => {
@@ -364,10 +254,7 @@ function resetSettings() {
     sort_dropdown.value = "timeAdded";
 }
 
-function refreshCards() {
-    clearCardContainer();
-    createCardsFromLibrary(Library.sorted);
-}
+
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read", 4);
@@ -391,4 +278,4 @@ Library.addBookToLibrary(book4);
 Library.addBookToLibrary(book5);
 
 updateArraysFromSettings();
-createCardsFromLibrary(Library.sorted);
+refreshCards();
