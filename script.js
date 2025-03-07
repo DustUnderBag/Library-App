@@ -2,6 +2,7 @@ import { Library } from "./Library.js";
 import { Book } from "./Book.js";
 
 import { validateForm, validatePagesNumber, inputs_Validate } from "./form-validate.js";
+import { updateArraysFromSettings } from "./book-sorter.js";
 
 //Add Book modal & inputs
 const btn_newBook = document.querySelector("button#add-book");
@@ -41,8 +42,7 @@ const filter_label = document.querySelector('label[for="filter-progress"]');
 const filter_dropdown = document.getElementById('filter-progress');
 const reset_btn = document.querySelector('button.reset-settings');
 
-let filtered = [];
-let sorted = [];
+
 
 btn_newBook.addEventListener('click', () => {
     modal.showModal();
@@ -357,12 +357,7 @@ reset_btn.addEventListener('click', e => {
     refreshCards();
 });
 
-function updateArraysFromSettings() {
-    //Create filtered array from Library.myLibrary, based on selected filter setting.
-    filtered = Library.filterBooks(filter_dropdown.value);
-    //Create sorted array from filtered, based on selected sort setting.
-    sorted = Library.sortBooks(filtered, sort_dropdown.value);
-}
+
 
 function resetSettings() {
     filter_dropdown.value = "all";
@@ -371,7 +366,7 @@ function resetSettings() {
 
 function refreshCards() {
     clearCardContainer();
-    createCardsFromLibrary(sorted);
+    createCardsFromLibrary(Library.sorted);
 }
 
 // Default Books
@@ -395,6 +390,5 @@ Library.addBookToLibrary(book3);
 Library.addBookToLibrary(book4);
 Library.addBookToLibrary(book5);
 
-filtered = Library.filterBooks(filter_dropdown.value);
-sorted = Library.sortBooks(filtered, sort_dropdown.value);
-createCardsFromLibrary(sorted);
+updateArraysFromSettings();
+createCardsFromLibrary(Library.sorted);

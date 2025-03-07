@@ -1,6 +1,10 @@
 export class Library {
     static myLibrary = [];
 
+    static filtered = [];
+
+    static sorted = [];
+
     static addBookToLibrary(book) {
         Library.myLibrary.push(book);
         console.log("Book: " + book.title);
@@ -40,29 +44,6 @@ export class Library {
         refreshCards();
     }
 
-    static filterBooks(progress) { //Non-mutating
-        if(progress == "all") { //return original array if all progress.
-            return Library.myLibrary;
-        }else { 
-            return Library.myLibrary.filter( book => (book.progress == progress));
-        }
-    }
 
-    static sortBooks(array, property) {
-        /* Parameters
-           - Sort array(books) by comparing every title/author/timeAdded.
-           - property: refers to object property on which the comparison performs.
-         */
-        let array_clone = [...array]; //Clone input array to make the sort() non-mutating.
-        
-        //Compare string property
-        if(property == "title" || property == "author") { 
-            return array_clone.sort( (a, b) => 
-                a[property].localeCompare( b[property]) );
-        }
-        
-        //Compare numeric property
-        return array_clone.sort( (a, b) => b[property] - a[property] );
-    }
     
 }
