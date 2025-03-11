@@ -1,3 +1,6 @@
+import { updateArraysFromSettings } from "./book-sorter.js";
+import { refreshCards } from "./book-displayer.js";
+
 export class Library {
     static myLibrary = [];
 

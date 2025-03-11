@@ -1,7 +1,8 @@
 import { Library } from "./Library.js";
 import { Book } from "./Book.js";
 
-import { validateForm, validatePagesNumber, inputs_Validate } from "./form-validate.js";
+import { createNewBook } from "./Book.js";
+import { validateForm, checkRequiredInput, checkPageNumber } from "./form-validate.js";
 import { updateArraysFromSettings } from "./book-sorter.js";
 import { refreshCards } from "./book-displayer.js";
 
@@ -10,14 +11,17 @@ const btn_newBook = document.querySelector("button#add-book");
 
 const modal = document.querySelector('dialog.book-modal');
 
-
 const starWrapper = document.querySelector('.star-wrapper');
 const stars = document.querySelectorAll('input.star')
 
+const book_form = document.querySelector('.book-modal > form');
 const btn_submit = document.querySelector("button.submit");
 const btn_cancel = document.querySelector("button.cancel");
 
+const input_title = document.querySelector("input#title");
+const input_author = document.querySelector("input#author");
 const input_pages = document.querySelector("input#pages");
+const inputs_Validate = [input_title, input_author, input_pages];
 
 //Edit Book modal & inputs
 const edit_modal = document.querySelector('dialog.edit-modal');
@@ -32,9 +36,6 @@ const edit_stars = document.querySelectorAll('.edit-star');
 const btn_edit_submit = document.querySelector("button#edit-submit");
 const btn_edit_Cancel = document.querySelector("button#edit-cancel");
 
-//Cards
-const cards_container = document.querySelector('.cards-container');
-
 //Filter & sort dropdown menus
 const sort_label = document.querySelector('label[for="sort"]');
 const sort_dropdown = document.getElementById('sort');
@@ -43,34 +44,9 @@ const filter_label = document.querySelector('label[for="filter-progress"]');
 const filter_dropdown = document.getElementById('filter-progress');
 const reset_btn = document.querySelector('button.reset-settings');
 
-
-
 btn_newBook.addEventListener('click', () => {
     modal.showModal();
 });
-
-function createNewBook() {
-    let title = document.querySelector("input#title").value;
-    let author =  document.querySelector("input#author").value;
-    let pages = document.querySelector("input#pages").value;
-    let progress = document.querySelector("select#progress").value;
-    let rating = getRating();
-
-    return new Book(title, author, pages, progress, rating);
-}
-
-function clearFormInputs() {
-    for(let input of inputs_Validate) {
-        input.value = "";
-
-        input.classList.remove('invalid');
-        input.classList.remove('valid');
-    }
-    document.querySelector("select#progress").value = "unread";
-    uncheckStars();
-}
-
-
 
 starWrapper.addEventListener('click', e => {
     uncheckStars();
@@ -93,14 +69,6 @@ function ratingHandler(e) {
     target.checked = true;
 }
 
-function getRating() {
-    const checkedStar = document.querySelector('.star:checked');
-    if(!checkedStar) return 0; //In case no star is checked / does not exist.
-
-    let rating = +checkedStar.value;
-    return rating;
-}
-
 function updateRating() {
     const checkedStar = document.querySelector('.edit-star:checked');
     if(!checkedStar) return 0; //In case no star is checked / does not exist.
@@ -121,38 +89,48 @@ function uncheckEditStars() {
     }
 }
 
+//modal.addEventListener('close', clearFormInputs);
+btn_cancel.addEventListener('click', () => modal.close());
+
 btn_submit.addEventListener('click', e => {
-    if( !validateForm() ) {
-        alert("Please fill all required inputs!");
-        return;
-    }
-    if( !validatePagesNumber() ) {
-        alert("Page number must be at least 1!");
-        input_pages.focus(); //Focus on invalid page number.
-        return;
-    }
+    //Don't proceed if form is invalid.
+    if(!validateForm()) return;
 
-    let book = createNewBook();
-    Library.addBookToLibrary(book); //Create book obj then store in the library[]
-
+    //Create book obj then store in the library[]
+    Library.addBookToLibrary( createNewBook() ); 
     updateArraysFromSettings();
     refreshCards();
-    
-    modal.close();
-    
-    e.preventDefault(); //prevent submitting the form to server.
-})
 
-btn_cancel.addEventListener('click', () => {
+    book_form.reset();
+
     modal.close();
+
+    //prevent submitting the form to server.
+    e.preventDefault();
 });
 
-modal.addEventListener('close', clearFormInputs);
+
+//Not in use
+function clearFormInputs() {
+    for(const input of inputs_Validate) {
+        input.value = "";
+        
+        input.classList.remove('invalid');
+        input.classList.remove('valid');
+        
+        //Reset validity and remove :invalid state.
+        input.setCustomValidity('');
+    }
+    document.querySelector("select#progress").value = "unread";
+    uncheckStars();
+}
+
+input_title.addEventListener('input', () => checkRequiredInput(input_title));
+input_author.addEventListener('input', () => checkRequiredInput(input_author));
+input_pages.addEventListener('input', () => checkPageNumber(input_pages));
 
 btn_edit_submit.addEventListener('click', editHandler);
 btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
-
-
 
 function editHandler() {
     let idf = this.getAttribute('data-identifier');
@@ -174,14 +152,6 @@ function editHandler() {
     uncheckEditStars();
     edit_modal.close();
 }
-
-
-
-input_pages.addEventListener('change', validatePagesNumber);
-
-
-
-
 
 //Filter & Sorting settings
 filter_dropdown.addEventListener('change', e => {
@@ -247,14 +217,10 @@ reset_btn.addEventListener('click', e => {
     refreshCards();
 });
 
-
-
 function resetSettings() {
     filter_dropdown.value = "all";
     sort_dropdown.value = "timeAdded";
 }
-
-
 
 // Default Books
 let book1 = new Book("Pride and Prejudice", "Jane Austen", 363, "read", 4);

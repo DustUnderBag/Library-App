@@ -30,3 +30,21 @@ export class Book {
         this.rating = newRating;
     }
 }
+
+export function createNewBook() {
+    let title = document.querySelector("input#title").value;
+    let author =  document.querySelector("input#author").value;
+    let pages = document.querySelector("input#pages").value;
+    let progress = document.querySelector("select#progress").value;
+    let rating = getRating();
+
+    return new Book(title, author, pages, progress, rating);
+}
+
+function getRating() {
+    const checkedStar = document.querySelector('.star:checked');
+    if(!checkedStar) return 0; //In case no star is checked / does not exist.
+
+    let rating = +checkedStar.value;
+    return rating;
+}

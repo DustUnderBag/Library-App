@@ -10,11 +10,7 @@ const edit_author = document.querySelector('#edit-author');
 const edit_pages = document.querySelector('#edit-pages');
 const edit_progress = document.querySelector('#edit-progress');
 
-const edit_starWrapper = document.querySelector('.edit-star-wrapper');
-const edit_stars = document.querySelectorAll('.edit-star');
-
 const btn_edit_submit = document.querySelector("button#edit-submit");
-const btn_edit_Cancel = document.querySelector("button#edit-cancel");
 
 export function refreshCards() {
     clearCardContainer();

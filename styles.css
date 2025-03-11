@@ -60,7 +60,7 @@ select {
     text-align-last: center;
 }
 
-.invalid {
+:user-invalid {
     border: 2px red solid;
 }
 

@@ -1,34 +1,39 @@
 const input_title = document.querySelector("input#title");
 const input_author = document.querySelector("input#author");
 const input_pages = document.querySelector("input#pages");
-const input_progress = document.querySelector("select#progress");
 
-//Store inputs for validation in an array
-const inputs_Validate = [input_title, input_author, input_pages]; 
+export function validateForm() {
+    //Check for unfilled required inputs
+    if(!checkRequiredInput(input_title)) return false;
+    if(!checkRequiredInput(input_author)) return false;
+    if(!checkRequiredInput(input_pages)) return false;
 
-function validatePagesNumber() {
-    if(input_pages.value <= 0) {
-        input_pages.classList.add('invalid'); //To-Do: Insert alert message below this input with CSS.
-        return false;
+    //Check for invalid page number
+    if( !checkPageNumber(input_pages) ) return false;
+    
+    return true;
+}
+
+export function checkRequiredInput(input) {
+    const isInvalid = input.validity.valueMissing;
+    if(isInvalid) {
+        input.setCustomValidity("Please fill in this field.");
+        input.focus();
     } else {
-        input_pages.classList.remove('invalid');
-        return true;
-    } 
-}
-
-function validateForm() {
-    let allVaild = true;
-    for(let input of inputs_Validate) {
-        if(!input.value) {
-            input.classList.add('invalid'); // //To-Do: Insert alert message below this input with CSS.
-            input.focus();
-            allVaild = false;
-        } else {
-            input.classList.remove('invalid');
-        }
+        input.setCustomValidity("");        
     }
-    return allVaild;
+    input.reportValidity();
+    return !isInvalid;
 }
 
-
-export {validatePagesNumber, validateForm, inputs_Validate};
+export function checkPageNumber(input) {
+    const isInvalid = input.validity.rangeUnderflow;
+    if(isInvalid) {
+        input.setCustomValidity("A book should have at least 1 page.");
+        input.focus();
+    } else {
+        input.setCustomValidity("");
+    }
+    input.reportValidity();
+    return !isInvalid;
+}
