@@ -2,7 +2,7 @@ import { Library } from "./Library.js";
 import { Book } from "./Book.js";
 
 import { createNewBook } from "./Book.js";
-import { validateForm, checkRequiredInput, checkPageNumber } from "./form-validate.js";
+import { validateForm, validateEditForm, checkRequiredInput, checkPageNumber } from "./form-validate.js";
 import { updateArraysFromSettings } from "./book-sorter.js";
 import { refreshCards } from "./book-displayer.js";
 
@@ -21,10 +21,10 @@ const btn_cancel = document.querySelector("button.cancel");
 const input_title = document.querySelector("input#title");
 const input_author = document.querySelector("input#author");
 const input_pages = document.querySelector("input#pages");
-const inputs_Validate = [input_title, input_author, input_pages];
 
 //Edit Book modal & inputs
 const edit_modal = document.querySelector('dialog.edit-modal');
+const edit_form = document.querySelector('dialog.edit-modal > form');
 const edit_title = document.querySelector('#edit-title');
 const edit_author = document.querySelector('#edit-author');
 const edit_pages = document.querySelector('#edit-pages');
@@ -89,10 +89,27 @@ function uncheckEditStars() {
     }
 }
 
-//modal.addEventListener('close', clearFormInputs);
+//Reset form when modal is closed.
+modal.addEventListener('close', () => book_form.reset());
+edit_modal.addEventListener('close', () => edit_form.reset());
+
+//Dynamic validation for book form input fields
+input_title.addEventListener('input', () => checkRequiredInput(input_title));
+input_author.addEventListener('input', () => checkRequiredInput(input_author));
+input_pages.addEventListener('input', () => checkPageNumber(input_pages));
+
+//Dynamic validation for edit form input fields
+edit_title.addEventListener('input', () => checkRequiredInput(edit_title));
+edit_author.addEventListener('input', () => checkRequiredInput(edit_author));
+edit_pages.addEventListener('input', () => checkPageNumber(edit_pages));
+
+btn_edit_submit.addEventListener('click', editHandler);
+btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
+
+btn_submit.addEventListener('click', formSubmitHandler );
 btn_cancel.addEventListener('click', () => modal.close());
 
-btn_submit.addEventListener('click', e => {
+function formSubmitHandler(e) {
     //Don't proceed if form is invalid.
     if(!validateForm()) return;
 
@@ -101,41 +118,21 @@ btn_submit.addEventListener('click', e => {
     updateArraysFromSettings();
     refreshCards();
 
-    book_form.reset();
-
     modal.close();
 
     //prevent submitting the form to server.
     e.preventDefault();
-});
-
-
-//Not in use
-function clearFormInputs() {
-    for(const input of inputs_Validate) {
-        input.value = "";
-        
-        input.classList.remove('invalid');
-        input.classList.remove('valid');
-        
-        //Reset validity and remove :invalid state.
-        input.setCustomValidity('');
-    }
-    document.querySelector("select#progress").value = "unread";
-    uncheckStars();
 }
 
-input_title.addEventListener('input', () => checkRequiredInput(input_title));
-input_author.addEventListener('input', () => checkRequiredInput(input_author));
-input_pages.addEventListener('input', () => checkPageNumber(input_pages));
-
-btn_edit_submit.addEventListener('click', editHandler);
-btn_edit_Cancel.addEventListener('click', () => edit_modal.close());
-
-function editHandler() {
+function editHandler(e) {
+    //Don't proceed if form is invalid.
+    if(!validateEditForm()) return;
+    
+    //Get book's index in the library
     let idf = this.getAttribute('data-identifier');
     let pos = Library.getPosFromIdentifier(idf);
 
+    //Update properties of the book.
     Library.myLibrary[pos].edit(edit_title.value, 
                         edit_author.value, 
                         edit_pages.value, 
@@ -145,12 +142,10 @@ function editHandler() {
     updateArraysFromSettings();
     refreshCards();
 
-    edit_title.value = null;
-    edit_author.value = null;
-    edit_pages.value = null;
-    edit_progress.value = 'unread';
-    uncheckEditStars();
     edit_modal.close();
+
+    //prevent submitting the form to server.
+    e.preventDefault();
 }
 
 //Filter & Sorting settings
